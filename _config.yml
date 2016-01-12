@@ -1,0 +1,18 @@
+gems: [jekyll-paginate]
+
+name: Corey Finley
+employee_title: Ruby on Rails Developer
+title: finleye
+email: finley.corey@gmail.com
+tagline: Ruby on Rails Dev
+description:
+  Brooklyn based developer and coffee enthusiast
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://finleye.com" # the base hostname & protocol for your site
+twitter_username: cfinley
+github_username:  finleye
+
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+markdown: kramdown

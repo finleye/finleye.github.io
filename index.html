@@ -1,52 +1,33 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Corey Finley</title>
-    <link href="./style.css" rel="stylesheet" type="text/css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+---
+layout: default
+title: Home
+---
 
-    <script src="./script.js" type="text/javascript"> </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0;">
-    <meta charset="UTF-8">
-    <meta name="description" content="Corey Finley, Developer">
-    <meta name="keywords" content="Resume,Finley,Developer">
-    <meta name="author" content="Corey Finley">
-  </head>
-  <body>
-    <div class="header">
-      <div class="container">
-        <div class="circular">
-        </div>
-        <h1>Corey Finley</h1>
-        <h2>Developer</h2>
-      </div>
-    </div>
-    <div class="content">
-      <div class="container">
-        <p>I'm a Brooklyn based developer and coffee enthusiast, with an extensive cat related mug collection. Self motivated, detail oriented, and with an eye for design, I have six years expereince building Ruby on Rails applicaitons. I'm focused on creating responsive and <a href="http://www.colatechevents.com/">easy to use</a> applications. I bring new ideas to projects to create even better finished products. Checkout my <a href="http://github.com/finleye">GitHub account</a> for some examples of my work.</p>
-        <p>I currently work as a developer for <a href="http://contently.com">Contently</a>, and I'm always looking for other projects to be a part of in my spare time. If you'd like to meet up, or just want to learn more, <a href="mailto:finley.corey@gmail.com">contact me</a> and start a conversation.</p>
-      </div>
-    </div>
-    <div class="contact">
-      <div class="container">
-        <div class="connections">
-          <a href="mailto:finley.corey@gmail.com">
-            <img class="social" alt="email" src="./images/ico_carousel_mail.png"/>
-          </a>
-          <a href="http://instagram.com/cfinley">
-            <img class="social" alt="instagram" src="./images/ico_social-instagram.png"/>
-          </a>
-          <a href="http://lnkd.in/WYb776">
-            <img class="social" alt="linkedin" src="./images/ico_social-linked.png"/>
-          </a>
-          <a href="http://twitter.com/cfinley">
-            <img class="social" alt="twitter" src="./images/ico_social-twitter.png"/>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="footer">
-      <p>Corey Finley | New York, NY</p>
-    </div>
-  </body>
-</html>
+<div class="posts">
+  {% for post in paginator.posts %}
+  <article class="post">
+    <h1 class="post-title">
+      <a href="{{ site.baseurl }}{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
+
+    <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date_to_string }}</time>
+
+    {{ post.content }}
+  </article>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item older" href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
+  {% else %}
+    <span class="pagination-item older">Older</span>
+  {% endif %}
+  {% if paginator.previous_page %}
+    <a class="pagination-item newer" href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
+  {% else %}
+    <span class="pagination-item newer">Newer</span>
+  {% endif %}
+</div>
