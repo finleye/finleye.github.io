@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "Totally not Livejournal"
+date:   2016-01-11 20:35:36 -0500
+categories: livejournal
+---
+
+With less complaining than Tumblr, and fewer feelings than Livejournal, I hope to make something here I can be proud of. I'll try to share things I learn while working on a side projects.
+
+I'm working on my first post about a [Sinatra][sinatra] app I started working on over the weekend. Where I realized that a lot of my Ruby knowledge turned out to actually be Rails knowledge. I'm getting know know Rack better, and hopefully I'll figure out how I can host stuff *without* [Heroku][heroku].
+
+In the mean time, get to know me though my [Twitter][twitter], [Instagram][instagram], or [GitHub][github]. Fell free to reach out on any of those, or email me at [finley.corey@gmail.com][email]!
+
+[sinatra]: http://www.sinatrarb.com/
+[heroku]: https://www.heroku.com/
+
+[twitter]: https://twitter.com/cfinley/
+[instagram]: https://www.instagram.com/cfinley/
+[github]: https://github.com/finleye
+[email]: mailto:finley.corey@gmail.com
+
