@@ -10,7 +10,7 @@
 
   <title>
     
-      finleye &middot; Ruby on Rails Dev
+      Day 1 &middot; finleye
     
   </title>
 
@@ -37,18 +37,10 @@
       </header>
 
       <main>
-        <div class="posts">
-  
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/sinatra/instagram/2016/01/13/day-1.html">
-        Day 1
-      </a>
-    </h1>
-
-    <time datetime="2016-01-13T09:00:00-05:00" class="post-date">13 Jan 2016</time>
-
-    <p>So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.</p>
+        <article class="post">
+  <h1 class="post-title">Day 1</h1>
+  <time datetime="2016-01-13T09:00:00-05:00" class="post-date">13 Jan 2016</time>
+  <p>So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.</p>
 
 <p>An easy solution for boiler-plating an app is to use <a href="https://github.com/zachpendleton/snfn">Snfn</a>. Similar to <code class="highlighter-rouge">rails new commandsapp</code>, you can run <code class="highlighter-rouge">snfn my_app</code> to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a <code class="highlighter-rouge">config.ru</code>, for use with <code class="highlighter-rouge">rackup</code>.</p>
 
@@ -128,63 +120,34 @@ GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
 <p>Boom! Secure environment variables for running the app locally. Up next: I’ll walk though some of the set up the <a href="https://www.instagram.com/developer/">Instagram API</a> and the pains of <a href="https://www.instagram.com/developer/sandbox/">sandbox mode</a>.</p>
 
 
-  </article>
-  
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/sinatra/heroku/instagram/2016/01/12/what-to-call-it.html">
-        What to call it
-      </a>
-    </h1>
-
-    <time datetime="2016-01-12T09:21:19-05:00" class="post-date">12 Jan 2016</time>
-
-    <p>A while back, a co-worker of mine, <a href="https://github.com/briancantrell">Brian</a>, told me about an idea for an app that would use the <a href="https://www.instagram.com/developer/">Instagram API</a>. I wanted to help and decided to write a small <a href="http://www.sinatrarb.com/">Sinatra</a> app to play with the API. A lot of frustration and learning later I figured out a few things;</p>
-
-<ol>
-  <li>Much of my Ruby knowledge turned out to be Rails knowledge. Small stuff, for example <code class="highlighter-rouge">#present?</code> is part of Rails, not Ruby.</li>
-  <li>It’s tricky to build a Sinatra app and stick to its framework. I had to read up on Sinatra conventions in an attempt to not build of all the Rails <em>conveniences</em> (read crutches) that I counted on.</li>
-  <li><a href="https://www.instagram.com/developer/sandbox/">Instagram’s Sandbox</a> mode for their API will make you pull your hair out if you don’t understand it.</li>
-</ol>
-
-<h3 id="it-needs-a-better-name">It needs a (better) name</h3>
-<p>But first, I had to figure out what to call it. I know you shouldn’t name things first, but I had to at least figure out what to call the repo. I started with <strong>Instalocation</strong>. Terrible, I know, but it was a location search of the API, so it seemed practical. I decided the best bet was to try a random app name generator. I landed on <strong>Still Leaf</strong> and went with it.</p>
-
-<p>My next post will be about some of the gems I used, and some things I learned about <a href="http://www.sinatrarb.com/">Sinatra</a>.</p>
-
-<p>See you soon!</p>
+</article>
 
 
-  </article>
-  
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/livejournal/2016/01/11/this-is-it.html">
-        Totally not Livejournal
-      </a>
-    </h1>
+<aside class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/sinatra/heroku/instagram/2016/01/12/what-to-call-it.html">
+            What to call it
+            <small><time datetime="2016-01-12T09:21:19-05:00">12 Jan 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/livejournal/2016/01/11/this-is-it.html">
+            Totally not Livejournal
+            <small><time datetime="2016-01-11T20:35:36-05:00">11 Jan 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</aside>
 
-    <time datetime="2016-01-11T20:35:36-05:00" class="post-date">11 Jan 2016</time>
-
-    <p>With less complaining than Tumblr, and fewer feelings than Livejournal, I hope to make something here I can be proud of. I’ll try to share things I learn while working on a side projects.</p>
-
-<p>I’m working on my first post about a <a href="http://www.sinatrarb.com/">Sinatra</a> app I started working on over the weekend. Where I realized that a lot of my Ruby knowledge turned out to actually be Rails knowledge. I’m getting know know Rack better, and hopefully I’ll figure out how I can host stuff <em>without</em> <a href="https://www.heroku.com/">Heroku</a>.</p>
-
-<p>In the mean time, get to know me though my <a href="https://twitter.com/cfinley/">Twitter</a>, <a href="https://www.instagram.com/cfinley/">Instagram</a>, or <a href="https://github.com/finleye">GitHub</a>. Fell free to reach out on any of those, or email me at <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a>!</p>
-
-
-  </article>
-  
-</div>
-
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
-    <span class="pagination-item newer">Newer</span>
-  
-</div>
 
       </main>
 

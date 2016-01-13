@@ -5,9 +5,102 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 13 Jan 2016 09:41:10 -0500</pubDate>
-    <lastBuildDate>Wed, 13 Jan 2016 09:41:10 -0500</lastBuildDate>
+    <pubDate>Wed, 13 Jan 2016 09:44:12 -0500</pubDate>
+    <lastBuildDate>Wed, 13 Jan 2016 09:44:12 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Day 1</title>
+        <description>&lt;p&gt;So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.&lt;/p&gt;
+
+&lt;p&gt;An easy solution for boiler-plating an app is to use &lt;a href=&quot;https://github.com/zachpendleton/snfn&quot;&gt;Snfn&lt;/a&gt;. Similar to &lt;code class=&quot;highlighter-rouge&quot;&gt;rails new commandsapp&lt;/code&gt;, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;snfn my_app&lt;/code&gt; to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt;, for use with &lt;code class=&quot;highlighter-rouge&quot;&gt;rackup&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;That &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file contains some information about how your app should be loaded and ran. You can take a look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file for &lt;a href=&quot;https://github.com/finleye/still-leaf&quot;&gt;Still Leaf&lt;/a&gt;, here &lt;a href=&quot;https://github.com/finleye/still-leaf/blob/master/config.ru&quot;&gt;in the repo&lt;/a&gt;. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;StillLeaf&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;sx&quot;&gt;%w{config/initializers lib}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;no&quot;&gt;Find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\/\..+$/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;directory?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The problem here being the &lt;code class=&quot;highlighter-rouge&quot;&gt;config/initializers&lt;/code&gt;, the first element in the array. While this bit of code is provided by &lt;a href=&quot;https://github.com/zachpendleton/snfn&quot;&gt;Snfn&lt;/a&gt;, there is no &lt;code class=&quot;highlighter-rouge&quot;&gt;config/initializers&lt;/code&gt; directory provided. From the app directory just run this to clear up this issue.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mkdir config
+$ cd config/
+$ mkdir initializers
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then when you run &lt;code class=&quot;highlighter-rouge&quot;&gt;rackup&lt;/code&gt;, it won’t blow up trying to load nonexistent directories.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-to-handle-env-variables&quot;&gt;How to handle ENV variables&lt;/h3&gt;
+&lt;p&gt;I knew I would be hosting this on &lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;, because it’s easy, free (at first), and well, mostly because I don’t know how to set up something on AWS. That’ll come in a much later post when I embark on that part of the journey.&lt;/p&gt;
+
+&lt;p&gt;I like to use a gem called &lt;a href=&quot;https://github.com/bkeepers/dotenv&quot;&gt;dotenv&lt;/a&gt;, I’ve used it before and it works well enough for what I need. You set up a &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; in the root of the app, and it interacts in the application, the same way Heroku environment variables do.&lt;/p&gt;
+
+&lt;p&gt;Here’s a &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; setup walkthrough;&lt;/p&gt;
+
+&lt;p class=&quot;language-ruby&quot;&gt;First, add it to your &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;
+~~~
+# Gemfile
+group :test, :development do
+  gem ‘dotenv-rails’
+end
+~~~&lt;/p&gt;
+
+&lt;p&gt;Then add it to your &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ touch .env
+$ echo .env &amp;gt;&amp;gt; .gitignore
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then your &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; will look like this;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;INSTAGRAM_CLIENT_ID=your_client_id
+INSTAGRAM_CLIENT_SECRET=your_client_secret
+INSTAGRAM_CALLBACK_URL=http://localhost:9292/oauth/callback
+GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You’ll need to add it to your &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; so the app knows how to load it;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# config.ru&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;RACK_ENV&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;production&#39;&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;dotenv&#39;&lt;/span&gt;
+  &lt;span class=&quot;no&quot;&gt;Dotenv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;load&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then you can do something like this in the app to use your environment variables.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;INSTAGRAM_CLIENT_ID&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Boom! Secure environment variables for running the app locally. Up next: I’ll walk though some of the set up the &lt;a href=&quot;https://www.instagram.com/developer/&quot;&gt;Instagram API&lt;/a&gt; and the pains of &lt;a href=&quot;https://www.instagram.com/developer/sandbox/&quot;&gt;sandbox mode&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 13 Jan 2016 09:00:00 -0500</pubDate>
+        <link>http://finleye.com/sinatra/instagram/2016/01/13/day-1.html</link>
+        <guid isPermaLink="true">http://finleye.com/sinatra/instagram/2016/01/13/day-1.html</guid>
+        
+        
+        <category>sinatra</category>
+        
+        <category>instagram</category>
+        
+      </item>
     
       <item>
         <title>What to call it</title>
