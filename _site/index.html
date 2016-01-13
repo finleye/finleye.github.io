@@ -50,6 +50,8 @@
 
     <p>So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.</p>
 
+<h4 id="getting-started">Getting started</h4>
+
 <p>An easy solution for boiler-plating an app is to use <a href="https://github.com/zachpendleton/snfn">Snfn</a>. Similar to <code class="highlighter-rouge">rails new commandsapp</code>, you can run <code class="highlighter-rouge">snfn my_app</code> to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a <code class="highlighter-rouge">config.ru</code>, for use with <code class="highlighter-rouge">rackup</code>.</p>
 
 <p>That <code class="highlighter-rouge">config.ru</code> file contains some information about how your app should be loaded and ran. You can take a look at the <code class="highlighter-rouge">config.ru</code> file for <a href="https://github.com/finleye/still-leaf">Still Leaf</a>, here <a href="https://github.com/finleye/still-leaf/blob/master/config.ru">in the repo</a>. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line:</p>
@@ -72,7 +74,7 @@
 
 <p>Then when you run <code class="highlighter-rouge">rackup</code>, it won’t blow up trying to load nonexistent directories.</p>
 
-<h3 id="how-to-handle-env-variables">How to handle ENV variables</h3>
+<h4 id="how-to-handle-env-variables">How to handle ENV variables</h4>
 <p>I knew I would be hosting this on <a href="https://www.heroku.com/">Heroku</a>, because it’s easy, free (at first), and well, mostly because I don’t know how to set up something on AWS. That’ll come in a much later post when I embark on that part of the journey.</p>
 
 <p>I like to use a gem called <a href="https://github.com/bkeepers/dotenv">dotenv</a>, I’ve used it before and it works well enough for what I need. You set up a <code class="highlighter-rouge">.env</code> in the root of the app, and it interacts in the application, the same way Heroku environment variables do.</p>
@@ -183,7 +185,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-13T17:49:29-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-13T17:51:35-05:00">2016</time>. All rights reserved.
   </small>
 </footer>
 

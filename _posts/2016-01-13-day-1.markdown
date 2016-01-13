@@ -7,6 +7,8 @@ categories: sinatra instagram
 
 So you want to build a Sinatra app using Instagram's API? Well you're in luck! I'll go though some of what I did, and hopefully provide some insight.
 
+#### Getting started
+
 An easy solution for boiler-plating an app is to use [Snfn][snfn]. Similar to `rails new commandsapp`, you can run `snfn my_app` to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a `config.ru`, for use with `rackup`.
 
 That `config.ru` file contains some information about how your app should be loaded and ran. You can take a look at the `config.ru` file for [Still Leaf][still-leaf], here [in the repo][config-ru]. In mine you'll see some load path stuff, bundler, and so on. What's really important here is the last line:
@@ -36,7 +38,7 @@ $ mkdir initializers
 
 Then when you run `rackup`, it won't blow up trying to load nonexistent directories.
 
-### How to handle ENV variables
+#### How to handle ENV variables
 I knew I would be hosting this on [Heroku][heroku], because it's easy, free (at first), and well, mostly because I don't know how to set up something on AWS. That'll come in a much later post when I embark on that part of the journey.
 
 I like to use a gem called [dotenv][dotenv], I've used it before and it works well enough for what I need. You set up a `.env` in the root of the app, and it interacts in the application, the same way Heroku environment variables do.

@@ -5,13 +5,15 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 13 Jan 2016 17:49:29 -0500</pubDate>
-    <lastBuildDate>Wed, 13 Jan 2016 17:49:29 -0500</lastBuildDate>
+    <pubDate>Wed, 13 Jan 2016 17:51:35 -0500</pubDate>
+    <lastBuildDate>Wed, 13 Jan 2016 17:51:35 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
         <title>Day 1</title>
         <description>&lt;p&gt;So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.&lt;/p&gt;
+
+&lt;h4 id=&quot;getting-started&quot;&gt;Getting started&lt;/h4&gt;
 
 &lt;p&gt;An easy solution for boiler-plating an app is to use &lt;a href=&quot;https://github.com/zachpendleton/snfn&quot;&gt;Snfn&lt;/a&gt;. Similar to &lt;code class=&quot;highlighter-rouge&quot;&gt;rails new commandsapp&lt;/code&gt;, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;snfn my_app&lt;/code&gt; to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt;, for use with &lt;code class=&quot;highlighter-rouge&quot;&gt;rackup&lt;/code&gt;.&lt;/p&gt;
 
@@ -35,7 +37,7 @@
 
 &lt;p&gt;Then when you run &lt;code class=&quot;highlighter-rouge&quot;&gt;rackup&lt;/code&gt;, it won’t blow up trying to load nonexistent directories.&lt;/p&gt;
 
-&lt;h3 id=&quot;how-to-handle-env-variables&quot;&gt;How to handle ENV variables&lt;/h3&gt;
+&lt;h4 id=&quot;how-to-handle-env-variables&quot;&gt;How to handle ENV variables&lt;/h4&gt;
 &lt;p&gt;I knew I would be hosting this on &lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;, because it’s easy, free (at first), and well, mostly because I don’t know how to set up something on AWS. That’ll come in a much later post when I embark on that part of the journey.&lt;/p&gt;
 
 &lt;p&gt;I like to use a gem called &lt;a href=&quot;https://github.com/bkeepers/dotenv&quot;&gt;dotenv&lt;/a&gt;, I’ve used it before and it works well enough for what I need. You set up a &lt;code class=&quot;highlighter-rouge&quot;&gt;.env&lt;/code&gt; in the root of the app, and it interacts in the application, the same way Heroku environment variables do.&lt;/p&gt;
