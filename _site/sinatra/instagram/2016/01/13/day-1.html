@@ -46,27 +46,21 @@
 
 <p>That <code class="highlighter-rouge">config.ru</code> file contains some information about how your app should be loaded and ran. You can take a look at the <code class="highlighter-rouge">config.ru</code> file for <a href="https://github.com/finleye/still-leaf">Still Leaf</a>, here <a href="https://github.com/finleye/still-leaf/blob/master/config.ru">in the repo</a>. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">run</span> <span class="no">StillLeaf</span>
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">run</span> <span class="no">StillLeaf</span></code></pre></figure>
 
 <p>This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="sx">%w{config/initializers lib}</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">load_path</span><span class="o">|</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sx">%w{config/initializers lib}</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">load_path</span><span class="o">|</span>
   <span class="no">Find</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">load_path</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
     <span class="nb">require</span> <span class="n">f</span> <span class="k">unless</span> <span class="n">f</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/\/\..+$/</span><span class="p">)</span> <span class="o">||</span> <span class="no">File</span><span class="p">.</span><span class="nf">directory?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
   <span class="p">}</span>
-<span class="k">end</span>
-</code></pre>
-</div>
+<span class="k">end</span></code></pre></figure>
 
 <p>The problem here being the <code class="highlighter-rouge">config/initializers</code>, the first element in the array. While this bit of code is provided by <a href="https://github.com/zachpendleton/snfn">Snfn</a>, there is no <code class="highlighter-rouge">config/initializers</code> directory provided. From the app directory just run this to clear up this issue.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir config
-$ cd config/
-$ mkdir initializers
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mkdir config
+<span class="gp">$ </span><span class="nb">cd </span>config/
+<span class="gp">$ </span>mkdir initializers</code></pre></figure>
 
 <p>Then when you run <code class="highlighter-rouge">rackup</code>, it won’t blow up trying to load nonexistent directories.</p>
 
@@ -77,45 +71,36 @@ $ mkdir initializers
 
 <p>Here’s a <code class="highlighter-rouge">.env</code> setup walkthrough;</p>
 
-<p class="language-ruby">First, add it to your <code class="highlighter-rouge">Gemfile</code>
-~~~
-# Gemfile
-group :test, :development do
-  gem ‘dotenv-rails’
-end
-~~~</p>
+<p>First, add it to your <code class="highlighter-rouge">Gemfile</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Gemfile</span>
+<span class="n">group</span> <span class="ss">:test</span><span class="p">,</span> <span class="ss">:development</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s1">'dotenv-rails'</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>Then add it to your <code class="highlighter-rouge">.gitignore</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ touch .env
-$ echo .env &gt;&gt; .gitignore
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>touch .env
+<span class="gp">$ </span><span class="nb">echo</span> .env &gt;&gt; .gitignore</code></pre></figure>
 
 <p>Then your <code class="highlighter-rouge">.env</code> will look like this;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>INSTAGRAM_CLIENT_ID=your_client_id
-INSTAGRAM_CLIENT_SECRET=your_client_secret
-INSTAGRAM_CALLBACK_URL=http://localhost:9292/oauth/callback
-GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">INSTAGRAM_CLIENT_ID</span><span class="o">=</span><span class="n">your_client_id</span>
+<span class="no">INSTAGRAM_CLIENT_SECRET</span><span class="o">=</span><span class="n">your_client_secret</span>
+<span class="no">INSTAGRAM_CALLBACK_URL</span><span class="o">=</span><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">localhost</span><span class="p">:</span><span class="mi">9292</span><span class="o">/</span><span class="n">oauth</span><span class="o">/</span><span class="n">callback</span>
+<span class="no">GOOGLE_MAPS_GEOCODING_KEY</span><span class="o">=</span><span class="n">your_gmaps_geocodding_key</span></code></pre></figure>
 
 <p>You’ll need to add it to your <code class="highlighter-rouge">config.ru</code> so the app knows how to load it;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1"># config.ru</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># config.ru</span>
 <span class="k">if</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'RACK_ENV'</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'production'</span>
   <span class="nb">require</span> <span class="s1">'dotenv'</span>
   <span class="no">Dotenv</span><span class="p">.</span><span class="nf">load</span>
-<span class="k">end</span>
-</code></pre>
-</div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Then you can do something like this in the app to use your environment variables.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="no">ENV</span><span class="p">[</span><span class="s2">"INSTAGRAM_CLIENT_ID"</span><span class="p">]</span>
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">ENV</span><span class="p">[</span><span class="s2">"INSTAGRAM_CLIENT_ID"</span><span class="p">]</span></code></pre></figure>
 
 <p>Boom! Secure environment variables for running the app locally. Up next: I’ll walk though some of the set up the <a href="https://www.instagram.com/developer/">Instagram API</a> and the pains of <a href="https://www.instagram.com/developer/sandbox/">sandbox mode</a>.</p>
 
@@ -161,7 +146,7 @@ GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-13T17:30:24-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-13T17:47:27-05:00">2016</time>. All rights reserved.
   </small>
 </footer>
 

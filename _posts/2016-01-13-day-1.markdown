@@ -11,30 +11,28 @@ An easy solution for boiler-plating an app is to use [Snfn][snfn]. Similar to `r
 
 That `config.ru` file contains some information about how your app should be loaded and ran. You can take a look at the `config.ru` file for [Still Leaf][still-leaf], here [in the repo][config-ru]. In mine you'll see some load path stuff, bundler, and so on. What's really important here is the last line:
 
-~~~
+{% highlight ruby %}
 run StillLeaf
-~~~
-{: .language-ruby}
+{% endhighlight %}
 
 This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:
 
-~~~
+{% highlight ruby %}
 %w{config/initializers lib}.each do |load_path|
   Find.find(load_path) { |f|
     require f unless f.match(/\/\..+$/) || File.directory?(f)
   }
 end
-~~~
-{: .language-ruby}
+{% endhighlight %}
 
 
 The problem here being the `config/initializers`, the first element in the array. While this bit of code is provided by [Snfn][snfn], there is no `config/initializers` directory provided. From the app directory just run this to clear up this issue.
 
-~~~
+{% highlight bash %}
 $ mkdir config
 $ cd config/
 $ mkdir initializers
-~~~
+{% endhighlight %}
 
 Then when you run `rackup`, it won't blow up trying to load nonexistent directories.
 
@@ -46,47 +44,45 @@ I like to use a gem called [dotenv][dotenv], I've used it before and it works we
 Here's a `.env` setup walkthrough;
 
 First, add it to your `Gemfile`
-~~~
+
+{% highlight ruby %}
 # Gemfile
 group :test, :development do
   gem 'dotenv-rails'
 end
-~~~
-{: .language-ruby}
+{% endhighlight %}
 
 Then add it to your `.gitignore`.
 
-~~~
+{% highlight bash %}
 $ touch .env
 $ echo .env >> .gitignore
-~~~
+{% endhighlight %}
 
 Then your `.env` will look like this;
 
-~~~
+{% highlight ruby %}
 INSTAGRAM_CLIENT_ID=your_client_id
 INSTAGRAM_CLIENT_SECRET=your_client_secret
 INSTAGRAM_CALLBACK_URL=http://localhost:9292/oauth/callback
 GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
-~~~
+{% endhighlight %}
 
 You'll need to add it to your `config.ru` so the app knows how to load it;
 
-~~~
+{% highlight ruby %}
 # config.ru
 if ENV['RACK_ENV'] != 'production'
   require 'dotenv'
   Dotenv.load
 end
-~~~
-{: .language-ruby}
+{% endhighlight %}
 
 Then you can do something like this in the app to use your environment variables.
 
-~~~
+{% highlight ruby %}
 ENV["INSTAGRAM_CLIENT_ID"]
-~~~
-{: .language-ruby}
+{% endhighlight %}
 
 Boom! Secure environment variables for running the app locally. Up next: I'll walk though some of the set up the [Instagram API][instagram-api] and the pains of [sandbox mode][instagram-sandbox].
 
