@@ -11,7 +11,7 @@ A while back, a co-worker of mine, [Brian][brian], told me about an idea for an 
 2. It's tricky to build a Sinatra app and stick to its framework. I had to read up on Sinatra conventions in an attempt to not build of all the Rails *conveniences* (read crutches) that I counted on.
 3. [Instagram's Sandbox][instagram-sandbox] mode for their API will make you pull your hair out if you don't understand it.
 
-#### It needs a (better) name
+### It needs a (better) name
 But first, I had to figure out what to call it. I know you shouldn't name things first, but I had to at least figure out what to call the repo. I started with **Instalocation**. Terrible, I know, but it was a location search of the API, so it seemed practical. I decided the best bet was to try a random app name generator. I landed on **Still Leaf** and went with it.
 
 My next post will be about some of the gems I used, and some things I learned about [Sinatra][sinatra].
