@@ -9,14 +9,14 @@ So you want to build a Sinatra app using Instagram's API? Well you're in luck! I
 
 An easy solution for boiler-plating an app is to use [Snfn][snfn]. Similar to `rails new commandsapp`, you can run `snfn my_app` to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a `config.ru`, for use with `rackup`.
 
-That `config.ru` file contains some information about how your app should be loaded and ran. You can take a look at the `config.ru` file for [Still Leaf][still-leaf], here [in the repo][config-ru]. In mine you'll see some load path stuff, bundler, and so on. What's really important here is the last line;
+That `config.ru` file contains some information about how your app should be loaded and ran. You can take a look at the `config.ru` file for [Still Leaf][still-leaf], here [in the repo][config-ru]. In mine you'll see some load path stuff, bundler, and so on. What's really important here is the last line:
 
 ~~~
 run StillLeaf
 ~~~
 {: .language-ruby}
 
-This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this;
+This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:
 
 ~~~
 %w{config/initializers lib}.each do |load_path|

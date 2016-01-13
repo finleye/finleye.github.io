@@ -52,13 +52,13 @@
 
 <p>An easy solution for boiler-plating an app is to use <a href="https://github.com/zachpendleton/snfn">Snfn</a>. Similar to <code class="highlighter-rouge">rails new commandsapp</code>, you can run <code class="highlighter-rouge">snfn my_app</code> to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a <code class="highlighter-rouge">config.ru</code>, for use with <code class="highlighter-rouge">rackup</code>.</p>
 
-<p>That <code class="highlighter-rouge">config.ru</code> file contains some information about how your app should be loaded and ran. You can take a look at the <code class="highlighter-rouge">config.ru</code> file for <a href="https://github.com/finleye/still-leaf">Still Leaf</a>, here <a href="https://github.com/finleye/still-leaf/blob/master/config.ru">in the repo</a>. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line;</p>
+<p>That <code class="highlighter-rouge">config.ru</code> file contains some information about how your app should be loaded and ran. You can take a look at the <code class="highlighter-rouge">config.ru</code> file for <a href="https://github.com/finleye/still-leaf">Still Leaf</a>, here <a href="https://github.com/finleye/still-leaf/blob/master/config.ru">in the repo</a>. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="n">run</span> <span class="no">StillLeaf</span>
 </code></pre>
 </div>
 
-<p>This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this;</p>
+<p>This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="sx">%w{config/initializers lib}</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">load_path</span><span class="o">|</span>
   <span class="no">Find</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">load_path</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
@@ -198,7 +198,7 @@ GOOGLE_MAPS_GEOCODING_KEY=your_gmaps_geocodding_key
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-13T09:58:13-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-13T10:01:46-05:00">2016</time>. All rights reserved.
   </small>
 </footer>
 

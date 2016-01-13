@@ -5,8 +5,8 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 13 Jan 2016 09:58:13 -0500</pubDate>
-    <lastBuildDate>Wed, 13 Jan 2016 09:58:13 -0500</lastBuildDate>
+    <pubDate>Wed, 13 Jan 2016 10:01:46 -0500</pubDate>
+    <lastBuildDate>Wed, 13 Jan 2016 10:01:46 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -15,13 +15,13 @@
 
 &lt;p&gt;An easy solution for boiler-plating an app is to use &lt;a href=&quot;https://github.com/zachpendleton/snfn&quot;&gt;Snfn&lt;/a&gt;. Similar to &lt;code class=&quot;highlighter-rouge&quot;&gt;rails new commandsapp&lt;/code&gt;, you can run &lt;code class=&quot;highlighter-rouge&quot;&gt;snfn my_app&lt;/code&gt; to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt;, for use with &lt;code class=&quot;highlighter-rouge&quot;&gt;rackup&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;That &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file contains some information about how your app should be loaded and ran. You can take a look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file for &lt;a href=&quot;https://github.com/finleye/still-leaf&quot;&gt;Still Leaf&lt;/a&gt;, here &lt;a href=&quot;https://github.com/finleye/still-leaf/blob/master/config.ru&quot;&gt;in the repo&lt;/a&gt;. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line;&lt;/p&gt;
+&lt;p&gt;That &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file contains some information about how your app should be loaded and ran. You can take a look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; file for &lt;a href=&quot;https://github.com/finleye/still-leaf&quot;&gt;Still Leaf&lt;/a&gt;, here &lt;a href=&quot;https://github.com/finleye/still-leaf/blob/master/config.ru&quot;&gt;in the repo&lt;/a&gt;. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;StillLeaf&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this;&lt;/p&gt;
+&lt;p&gt;This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;sx&quot;&gt;%w{config/initializers lib}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
   &lt;span class=&quot;no&quot;&gt;Find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
