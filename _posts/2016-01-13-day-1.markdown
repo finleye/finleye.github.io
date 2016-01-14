@@ -63,7 +63,7 @@ $ echo .env >> .gitignore
 
 Then your `.env` will look like this;
 
-{% highlight ruby %}
+{% highlight bash %}
 INSTAGRAM_CLIENT_ID=your_client_id
 INSTAGRAM_CLIENT_SECRET=your_client_secret
 INSTAGRAM_CALLBACK_URL=http://localhost:9292/oauth/callback
