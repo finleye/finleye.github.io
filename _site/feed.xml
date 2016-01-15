@@ -5,9 +5,65 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 14 Jan 2016 14:03:11 -0500</pubDate>
-    <lastBuildDate>Thu, 14 Jan 2016 14:03:11 -0500</lastBuildDate>
+    <pubDate>Fri, 15 Jan 2016 11:47:43 -0500</pubDate>
+    <lastBuildDate>Fri, 15 Jan 2016 11:47:43 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Head in the Sandbox</title>
+        <description>&lt;p&gt;I spent way to much time banging my head against my keyboard when I was getting empty responses from Instagram’s API, and hopefully I can help some of you avoid doing the same. I’ll quickly outline some of Instagram’s sandbox API limitations and what to expect.&lt;/p&gt;
+
+&lt;h4 id=&quot;but-this-call-works&quot;&gt;But this call works?&lt;/h4&gt;
+
+&lt;p&gt;In my &lt;a href=&quot;/sinatra/instagram/2016/01/14/instagram-integration.html&quot;&gt;previous post&lt;/a&gt; I talked about setting up Instagram API integration in a [Sinatra][insatra] app. And I quickly hit a wall. I was able to get the &lt;code class=&quot;highlighter-rouge&quot;&gt;#user_recent_media&lt;/code&gt; call working no issue. I signed in as myself and was able to see my recent posts. So I moved on to my main goal, which was searching the API by location. I added some coordinates for Manhattan and got &lt;em&gt;nothing&lt;/em&gt;…&lt;/p&gt;
+
+&lt;p&gt;Here’s how it went&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;insta_client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Instagram&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;access_token: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;some_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Great. I have a client.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;insta_client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;user_recent_media&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;media&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Great! Plenty of pictures!&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;insta_client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;media_search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;40.7127&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;74.0059&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;distance: &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;media&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Nothing…&lt;/p&gt;
+
+&lt;p&gt;I looked at the call. I was getting a 200. No problems with the authentication. No network issues.&lt;/p&gt;
+
+&lt;p&gt;I spent some time searching the web and found the smoking gun. It was &lt;em&gt;&lt;a href=&quot;https://www.instagram.com/developer/sandbox/&quot;&gt;sandbox mode&lt;/a&gt;&lt;/em&gt;!&lt;/p&gt;
+
+&lt;h4 id=&quot;maybe-read-the-api-docs&quot;&gt;Maybe read the API Docs&lt;/h4&gt;
+
+&lt;p&gt;As it turns out, in November of 2015, Instagram changed their API so that all new apps start in sandbox mode when using the API, until they are approved. This limits your interactions with the API in a few ways, but the problem here was that I wanted public data (scope key &lt;code class=&quot;highlighter-rouge&quot;&gt;public_data&lt;/code&gt;), but in sandbox mode “public” means public data from your applications users. So, you only get public data from users who have been invited to test your app, and authorized the app for &lt;code class=&quot;highlighter-rouge&quot;&gt;public_data&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After searching for coordinates for an area I had tagged images for, I was able to get images.&lt;/p&gt;
+
+&lt;p&gt;Then after looking at the docs for sandbox mode, I found this;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The response returned by this endpoint will contain only media with the given tag, as expected. But instead of returning media from any public Instagram user, it will return only media that belongs to your sandbox users, restricted to the last 20 for each user.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In the end, &lt;a href=&quot;https://en.wikipedia.org/wiki/RTFM&quot;&gt;RTFM&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Up next, adding a couple rails conveniences to Sinatra. Until then, feel free to contact me on &lt;a href=&quot;https://twitter.com/cfinley&quot;&gt;twitter&lt;/a&gt; or &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#102;&amp;#105;&amp;#110;&amp;#108;&amp;#101;&amp;#121;&amp;#046;&amp;#099;&amp;#111;&amp;#114;&amp;#101;&amp;#121;&amp;#064;&amp;#103;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;email&lt;/a&gt; me. See you soon!&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 15 Jan 2016 09:00:00 -0500</pubDate>
+        <link>http://finleye.com/instagram/sandbox/2016/01/15/sandbox-mode.html</link>
+        <guid isPermaLink="true">http://finleye.com/instagram/sandbox/2016/01/15/sandbox-mode.html</guid>
+        
+        
+        <category>instagram</category>
+        
+        <category>sandbox</category>
+        
+      </item>
     
       <item>
         <title>Instagram Integration</title>

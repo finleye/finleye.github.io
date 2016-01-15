@@ -11,18 +11,20 @@ I spent way to much time banging my head against my keyboard when I was getting 
 
 In my [previous post][previous-post] I talked about setting up Instagram API integration in a [Sinatra][insatra] app. And I quickly hit a wall. I was able to get the `#user_recent_media` call working no issue. I signed in as myself and was able to see my recent posts. So I moved on to my main goal, which was searching the API by location. I added some coordinates for Manhattan and got _nothing_... 
 
+Here's how it went
+
 {% highlight ruby %}
 insta_client = Instagram.client(access_token: some_token)
 {% endhighlight %}
 
-Looks good!
+Great. I have a client.
 
 {% highlight ruby %}
-insta_client.user_recent_media
+insta_client.user_recent_media.media
+=> [<Media>, <Media>, <Media>, ...]
 {% endhighlight %}
 
 Great! Plenty of pictures!
-
 
 {% highlight ruby %}
 insta_client.media_search('40.7127', '74.0059', distance: 5000).media
@@ -35,9 +37,11 @@ I looked at the call. I was getting a 200. No problems with the authentication. 
 
 I spent some time searching the web and found the smoking gun. It was *[sandbox mode][instagram-sandbox]*!
 
+#### Maybe read the API Docs
+
 As it turns out, in November of 2015, Instagram changed their API so that all new apps start in sandbox mode when using the API, until they are approved. This limits your interactions with the API in a few ways, but the problem here was that I wanted public data (scope key `public_data`), but in sandbox mode "public" means public data from your applications users. So, you only get public data from users who have been invited to test your app, and authorized the app for `public_data`.
 
-After searching for coordinates for an area I had tagged, I was able to get images.
+After searching for coordinates for an area I had tagged images for, I was able to get images.
 
 Then after looking at the docs for sandbox mode, I found this;
 

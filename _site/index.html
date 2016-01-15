@@ -41,6 +41,60 @@
   
   <article class="post">
     <h1 class="post-title">
+      <a href="/instagram/sandbox/2016/01/15/sandbox-mode.html">
+        Head in the Sandbox
+      </a>
+    </h1>
+
+    <time datetime="2016-01-15T09:00:00-05:00" class="post-date">15 Jan 2016</time>
+
+    <p>I spent way to much time banging my head against my keyboard when I was getting empty responses from Instagram’s API, and hopefully I can help some of you avoid doing the same. I’ll quickly outline some of Instagram’s sandbox API limitations and what to expect.</p>
+
+<h4 id="but-this-call-works">But this call works?</h4>
+
+<p>In my <a href="/sinatra/instagram/2016/01/14/instagram-integration.html">previous post</a> I talked about setting up Instagram API integration in a [Sinatra][insatra] app. And I quickly hit a wall. I was able to get the <code class="highlighter-rouge">#user_recent_media</code> call working no issue. I signed in as myself and was able to see my recent posts. So I moved on to my main goal, which was searching the API by location. I added some coordinates for Manhattan and got <em>nothing</em>…</p>
+
+<p>Here’s how it went</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">insta_client</span> <span class="o">=</span> <span class="no">Instagram</span><span class="p">.</span><span class="nf">client</span><span class="p">(</span><span class="ss">access_token: </span><span class="n">some_token</span><span class="p">)</span></code></pre></figure>
+
+<p>Great. I have a client.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">insta_client</span><span class="p">.</span><span class="nf">user_recent_media</span><span class="p">.</span><span class="nf">media</span>
+<span class="o">=&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="no">Media</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="no">Media</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="no">Media</span><span class="o">&gt;</span><span class="p">,</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span><span class="p">]</span></code></pre></figure>
+
+<p>Great! Plenty of pictures!</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">insta_client</span><span class="p">.</span><span class="nf">media_search</span><span class="p">(</span><span class="s1">'40.7127'</span><span class="p">,</span> <span class="s1">'74.0059'</span><span class="p">,</span> <span class="ss">distance: </span><span class="mi">5000</span><span class="p">).</span><span class="nf">media</span>
+<span class="o">=&gt;</span> <span class="p">[]</span></code></pre></figure>
+
+<p>Nothing…</p>
+
+<p>I looked at the call. I was getting a 200. No problems with the authentication. No network issues.</p>
+
+<p>I spent some time searching the web and found the smoking gun. It was <em><a href="https://www.instagram.com/developer/sandbox/">sandbox mode</a></em>!</p>
+
+<h4 id="maybe-read-the-api-docs">Maybe read the API Docs</h4>
+
+<p>As it turns out, in November of 2015, Instagram changed their API so that all new apps start in sandbox mode when using the API, until they are approved. This limits your interactions with the API in a few ways, but the problem here was that I wanted public data (scope key <code class="highlighter-rouge">public_data</code>), but in sandbox mode “public” means public data from your applications users. So, you only get public data from users who have been invited to test your app, and authorized the app for <code class="highlighter-rouge">public_data</code>.</p>
+
+<p>After searching for coordinates for an area I had tagged images for, I was able to get images.</p>
+
+<p>Then after looking at the docs for sandbox mode, I found this;</p>
+
+<blockquote>
+  <p>The response returned by this endpoint will contain only media with the given tag, as expected. But instead of returning media from any public Instagram user, it will return only media that belongs to your sandbox users, restricted to the last 20 for each user.</p>
+</blockquote>
+
+<p>In the end, <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>.</p>
+
+<p>Up next, adding a couple rails conveniences to Sinatra. Until then, feel free to contact me on <a href="https://twitter.com/cfinley">twitter</a> or <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">email</a> me. See you soon!</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
       <a href="/sinatra/instagram/2016/01/14/instagram-integration.html">
         Instagram Integration
       </a>
@@ -273,7 +327,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-14T14:03:11-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-15T11:47:43-05:00">2016</time>. All rights reserved.
   </small>
 </footer>
 
