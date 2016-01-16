@@ -41,6 +41,176 @@
   
   <article class="post">
     <h1 class="post-title">
+      <a href="/elixir/scheme/2016/01/16/other-languages.html">
+        There's Always More to Learn
+      </a>
+    </h1>
+
+    <time datetime="2016-01-16T09:00:00-05:00" class="post-date">16 Jan 2016</time>
+
+    <p>I’ve been trying to broaden my skill set lately. I’m reading books that I should have long before now (<a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-Oriented Design in Ruby</a>, and <a href="http://www.amazon.com/The-Pragmatic-Programmer-Journeyman-Master/dp/020161622X">The Pragmatic Programmer</a>), and I’m trying out a few languages. I wanted to play with functional programming because I have very little exposure to it, so on the suggestion of a co-worker, I started reading through <a href="http://www.amazon.com/The-Little-Schemer-4th-Edition/dp/0262560992">The Little Schemer</a>. It made me think about problems in a new way, and I think it improved my daily work.</p>
+
+<h4 id="a-little-schemen">A little Scheme’n</h4>
+
+<p>In a technical interview I was asked to write out, on a white board, how to implement <a href="http://apidock.com/ruby/Array/flatten">Ruby’s <code class="highlighter-rouge">flatten</code> method</a>. Flatten takes an Array and reduces it to a single dimension. I think this is a great exercise when trying out new languages, because you get to interact with objects, dissect them, and reconstruct them.</p>
+
+<p><a href="http://www.amazon.com/The-Little-Schemer-4th-Edition/dp/0262560992">The Little Schemer</a> impresses that when working with functional languages you need to set out rules about how the iterations should work. Here’s the list for my algorithm:</p>
+
+<ol>
+  <li>Return when: all elements are <code class="highlighter-rouge">atom</code>s.</li>
+  <li>Handle nulls: if the tail is null, then the only element is the head, flatten it!</li>
+  <li>Else: merge the flattened head, and the flattened tail.</li>
+</ol>
+
+<p>First, let’s write a small test so that we know when it works.</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="c1">; sample lists</span>
+<span class="p">(</span><span class="k">define</span> <span class="nv">l</span> <span class="o">'</span><span class="p">((</span><span class="nf">a</span><span class="p">)</span> <span class="nv">b</span><span class="p">)</span> <span class="p">)</span>
+<span class="p">(</span><span class="k">define</span> <span class="nv">m</span> <span class="o">'</span><span class="p">(((</span><span class="nf">a</span><span class="p">))</span> <span class="p">(</span><span class="nf">b</span><span class="p">))</span> <span class="p">)</span>
+<span class="p">(</span><span class="k">define</span> <span class="nv">n</span> <span class="o">'</span><span class="p">((</span><span class="nf">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">c</span> <span class="p">(</span><span class="nf">d</span> <span class="nv">e</span><span class="p">))))</span>
+
+<span class="c1">; test flatten against all sample lists</span>
+<span class="p">(</span><span class="k">define</span> <span class="nv">spec</span>
+    <span class="p">(</span><span class="k">and</span>
+        <span class="p">(</span><span class="nf">all_atoms?</span> <span class="p">(</span><span class="nf">flatten</span> <span class="nv">l</span><span class="p">))</span>
+        <span class="p">(</span><span class="nf">all_atoms?</span> <span class="p">(</span><span class="nf">flatten</span> <span class="nv">m</span><span class="p">))</span>
+        <span class="p">(</span><span class="nf">all_atoms?</span> <span class="p">(</span><span class="nf">flatten</span> <span class="nv">n</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+<p>Run it:</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="nv">Error:</span> <span class="nv">execute:</span> <span class="nv">unbound</span> <span class="nv">symbol:</span> <span class="s">"flatten"</span> <span class="err">[]</span></code></pre></figure>
+
+<p>Nice, let’s get started. Is the list <code class="highlighter-rouge">all_atoms?</code></p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">atom?</span>
+    <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">x</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">and</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">pair?</span> <span class="nv">x</span><span class="p">))</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">null?</span> <span class="nv">x</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define</span> <span class="nv">all_atoms?</span>
+    <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">li</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">null?</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">li</span><span class="p">))</span>
+            <span class="p">(</span><span class="nf">atom?</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">li</span><span class="p">))</span>
+            <span class="p">(</span><span class="k">and</span> <span class="p">(</span><span class="nf">atom?</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">li</span><span class="p">))</span> <span class="p">(</span><span class="nf">all_atoms?</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">li</span><span class="p">))))))</span></code></pre></figure>
+
+<p>Eight lines, and forty two parenthesis later, we have a method that checks each element to see if it’s an <code class="highlighter-rouge">atom</code> only returning false if it’s not. We also have to merge the lists, so let’s write the <code class="highlighter-rouge">merge</code> method.</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="p">(</span><span class="nf">merge</span> <span class="nv">l1</span> <span class="nv">l2</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">null?</span> <span class="nv">l1</span><span class="p">)</span> <span class="nv">l2</span>
+        <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">null?</span> <span class="nv">l2</span><span class="p">)</span> <span class="nv">l1</span>
+            <span class="p">(</span><span class="nb">cons</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">l1</span><span class="p">)</span> <span class="p">(</span><span class="nf">merge</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">l1</span><span class="p">)</span> <span class="nv">l2</span><span class="p">)))))</span></code></pre></figure>
+
+<p>Also recursive, this method takes each element and adds it to the larger list.</p>
+
+<p>Finally flatten them!</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">flatten</span>
+    <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">x</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nf">all_atoms?</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">x</span>
+            <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">null?</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">x</span><span class="p">))</span> <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">x</span><span class="p">))</span>
+                <span class="p">(</span><span class="nf">merge</span> <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nb">list</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">x</span><span class="p">)))</span> <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">x</span><span class="p">)))))))</span></code></pre></figure>
+
+<p>Here we first check that the list is not all atoms, if it is, return it. If it has a list inside, continue. If the tail is null, then it’s just the head and it’s not an <code class="highlighter-rouge">atom</code> so flatten it. And finally if there is a head and a tail, merge the flattened version of the two.</p>
+
+<p>Let’s run it and see if it works.</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="nv">:&gt;</span> <span class="nv">spec</span>
+<span class="nv">=&gt;</span> <span class="no">#t</span></code></pre></figure>
+
+<p>Boom! My obviously perfect test show how incredible my code is! Of course I’m kidding, but this looks like it is in fact working. You can take my word for it, or check out this <a href="https://repl.it/BQKT/12">repl.it</a> link to give it a shot. Now that it’s working, I want to try another language.</p>
+
+<h4 id="elixir">Elixir</h4>
+
+<p>Some people in my office have been talking about <a href="http://elixir-lang.org/">Elixir</a>, and I wanted to try it out, so I thought this was another perfect time to try to write flatten. I downloaded the language, and kicked up a new project with <code class="highlighter-rouge">mix</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mix new flatten</code></pre></figure>
+
+<p>Let’s write some tests</p>
+
+<figure class="highlight"><pre><code class="language-elixir" data-lang="elixir"><span class="c1"># test/flatten_test.exs</span>
+<span class="k">defmodule</span> <span class="no">FlattenTest</span> <span class="k">do</span>
+  <span class="kn">use</span> <span class="no">ExUnit</span><span class="o">.</span><span class="no">Case</span>
+  <span class="n">doctest</span> <span class="no">Flatten</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">empty list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([])</span> <span class="o">==</span> <span class="p">[]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">list of atoms"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">,</span> <span class="ss">:c</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="ss">:a</span><span class="p">,</span> <span class="ss">:b</span><span class="p">,</span> <span class="ss">:c</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">list of mixed data types"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:c</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:c</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">flattens a list of an empty list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([[]])</span> <span class="o">==</span> <span class="p">[]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">flattens a list within a list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="p">[</span><span class="m">3</span><span class="p">]])</span> <span class="o">==</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">flattens a list within a list, when the head is a list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([[</span><span class="m">1</span><span class="p">],</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">flattens a list within a list, when the head is a list in a list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([[[</span><span class="m">1</span><span class="p">]],</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="n">test</span> <span class="sd">"</span><span class="s2">flattens a list within a list, when the tail is a multipart list"</span> <span class="k">do</span>
+    <span class="n">assert</span> <span class="no">Flatten</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="m">1</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]])</span> <span class="o">==</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Run it</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mix <span class="nb">test
+</span>8 tests, 8 failures</code></pre></figure>
+
+<p>Cool! Got some tests. Let’s get started.</p>
+
+<p>First, we need a handler method, we’ll just call it <code class="highlighter-rouge">flatten</code>, the first handler will just handle the empty array case.</p>
+
+<figure class="highlight"><pre><code class="language-elixir" data-lang="elixir"><span class="k">def</span> <span class="n">flatten</span><span class="p">(</span><span class="n">input</span><span class="p">),</span> <span class="k">do</span><span class="p">:</span> <span class="n">_flatten</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+<span class="k">defp</span> <span class="n">_flatten</span><span class="p">([]),</span> <span class="k">do</span><span class="p">:</span> <span class="p">[]</span></code></pre></figure>
+
+<p>Now if we run the test again, we should at least get the first one to pass.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mix <span class="nb">test
+</span>8 tests, 7 failures</code></pre></figure>
+
+<p>Nice. One down and only seven to go. Now there are two cases for the iteration. The head is a list, in which case we should concatenate the flattened head with the flattened tail.</p>
+
+<figure class="highlight"><pre><code class="language-elixir" data-lang="elixir"><span class="k">defp</span> <span class="n">_flatten</span><span class="p">([</span><span class="n">head</span><span class="o">|</span><span class="n">tail</span><span class="p">])</span> <span class="ow">when</span> <span class="n">is_list</span><span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">_flatten</span><span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="o">++</span> <span class="n">_flatten</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>That gets us down to just six failures, so let’s handle the other case. If the head is not a list, we should concatenate the head in a list, with the flattened version of the tail. That looks like this;</p>
+
+<figure class="highlight"><pre><code class="language-elixir" data-lang="elixir"><span class="k">defp</span> <span class="n">_flatten</span><span class="p">([</span><span class="n">head</span><span class="o">|</span><span class="n">tail</span><span class="p">]),</span> <span class="k">do</span><span class="p">:</span> <span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">++</span> <span class="n">_flatten</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span></code></pre></figure>
+
+<p>You can see the <a href="https://github.com/finleye/flatten/blob/master/lib/flatten.ex">full Flatten module here</a>. Let’s try it!</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mix <span class="nb">test
+</span>8 tests, 0 failures</code></pre></figure>
+
+<p>Nice! All green! As you can see I’ve barely scratched the surface of what this language is capable of, but at least I’ve figured out some of the syntax and how the language works. If you want to see the full <code class="highlighter-rouge">mix</code> project, it’s <a href="https://github.com/finleye/flatten">here in a repo</a>.</p>
+
+<h4 id="onward-and-upward">Onward and upward</h4>
+
+<p>I really liked working with these other languages, and plan to spend more time with them. I don’t often use recursion as a strategy for solving problems in my daily work, it rarely calls for it. But these exercises make me think about programming challenges in a different way, and that’s always a good thing.</p>
+
+<p>I’m still working on my next post about my Sinatra project. But I’ll have it posted shortly. As always, feel free to contact me on <a href="https://twitter.com/cfinley">twitter</a> or <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">email</a> me. See you soon! See you soon!</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
       <a href="/instagram/sandbox/2016/01/15/sandbox-mode.html">
         Head in the Sandbox
       </a>
@@ -286,29 +456,11 @@
 
   </article>
   
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/livejournal/2016/01/11/this-is-it.html">
-        Totally not Livejournal
-      </a>
-    </h1>
-
-    <time datetime="2016-01-11T20:35:36-05:00" class="post-date">11 Jan 2016</time>
-
-    <p>With less complaining than Tumblr, and fewer feelings than Livejournal, I hope to make something here I can be proud of. I’ll try to share things I learn while working on a side projects.</p>
-
-<p>I’m working on my first post about a <a href="http://www.sinatrarb.com/">Sinatra</a> app I started working on over the weekend. Where I realized that a lot of my Ruby knowledge turned out to actually be Rails knowledge. I’m getting know know Rack better, and hopefully I’ll figure out how I can host stuff <em>without</em> <a href="https://www.heroku.com/">Heroku</a>.</p>
-
-<p>In the mean time, get to know me though my <a href="https://twitter.com/cfinley/">Twitter</a>, <a href="https://www.instagram.com/cfinley/">Instagram</a>, or <a href="https://github.com/finleye">GitHub</a>. Fell free to reach out on any of those, or email me at <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a>!</p>
-
-
-  </article>
-  
 </div>
 
 <div class="pagination">
   
-    <span class="pagination-item older">Older</span>
+    <a class="pagination-item older" href="/blog/page2/">Older</a>
   
   
     <span class="pagination-item newer">Newer</span>
@@ -327,7 +479,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-15T11:47:43-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-16T16:05:38-05:00">2016</time>. All rights reserved.
   </small>
 </footer>
 
