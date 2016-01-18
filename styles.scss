@@ -26,3 +26,45 @@
 @import "posts";
 @import "pagination";
 @import "message";
+
+
+.masthead{
+  margin-bottom: 2rem;
+}
+
+.masthead-title{
+  margin-top: 5px;
+}
+
+img.avatar {
+  background-size: 100%;
+  display: block;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 100px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  width: 40px;
+  margin-right: 15px;
+}
+
+img.prof-pic {
+  background-size: 100%;
+  display: block;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 100px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  width: 200px;
+  margin-right: 15px;
+  align: left;
+}
+
+.about-me {
+  margin-bottom: 4em;
+}
+  .bio {
+    padding-top: 2.5em;
+    padding-left: 13.5em;
+  }
