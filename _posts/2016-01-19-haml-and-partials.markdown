@@ -5,7 +5,7 @@ date: 2016-01-19 09:00:00 -0500
 categories: sinatra
 ---
 
-When I started working on this Sinatra app, I told myself I wouldn't turn it into Rails. That lasted all of about 20 minutes. I immediately realized I was missing a could things that I couldn't do without.
+When I started working on this Sinatra app, I told myself I wouldn't turn it into Rails. And I stuck to it for about 20 minutes. Here are a few things I realized I really needed that I was used to.
 
 #### HAML
 
@@ -91,7 +91,7 @@ And use it in a few different views, here's an example;
 
 #### Short and Sweet
 
-This post is shorter than most, but hopefully straight foward enough that it's useful! As always, feel free to contact me on [twitter] or [email] me. See you soon! See you soon!
+This post is shorter than most, but hopefully straight foward enough that it's useful! As always, feel free to contact me on [twitter] or [email] me. See you soon!
 
 [haml-gem]: https://github.com/haml/haml
 [sinatra-partial-gem]: https://github.com/yb66/Sinatra-Partial
