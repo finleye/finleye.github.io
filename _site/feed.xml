@@ -5,9 +5,93 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 18 Jan 2016 18:58:55 -0500</pubDate>
-    <lastBuildDate>Mon, 18 Jan 2016 18:58:55 -0500</lastBuildDate>
+    <pubDate>Tue, 19 Jan 2016 20:41:31 -0500</pubDate>
+    <lastBuildDate>Tue, 19 Jan 2016 20:41:31 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>HAML and Partials</title>
+        <description>&lt;p&gt;When I started working on this Sinatra app, I told myself I wouldn’t turn it into Rails. That lasted all of about 20 minutes. I imediately realized I was missing a could things that I couldn’t do without.&lt;/p&gt;
+
+&lt;h4 id=&quot;haml&quot;&gt;HAML&lt;/h4&gt;
+
+&lt;p&gt;Adding HAML support to a Sinatra app is pretty straight forward. First add the &lt;a href=&quot;https://github.com/haml/haml&quot;&gt;haml gem&lt;/a&gt; to your &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# ./Gemfile&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;haml&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then require it in your &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# ./config.ru&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;haml&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;No you can call the your &lt;code class=&quot;highlighter-rouge&quot;&gt;.haml&lt;/code&gt; views in the application, instead of using the &lt;code class=&quot;highlighter-rouge&quot;&gt;html&lt;/code&gt; tag.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;/&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:welcome&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Pretty easy!&lt;/p&gt;
+
+&lt;h4 id=&quot;partials&quot;&gt;Partials&lt;/h4&gt;
+
+&lt;p&gt;What’s likely more interesting and usefull is setting up partials the way rails natively supports.&lt;/p&gt;
+
+&lt;p&gt;First you’ll of course need the &lt;a href=&quot;https://github.com/yb66/Sinatra-Partial&quot;&gt;sinatra-partial gem&lt;/a&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# ./Gemfile&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sinatra-partial&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And require it.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# ./config.ru&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;sinatra/partial&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then you have to register and enable it within your app.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# ./still_leaf.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StillLeaf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;register&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Partial&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;enable&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:partial_underscores&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now within views your abble to load partials similar to the way you do in rails.&lt;/p&gt;
+
+&lt;p&gt;I’ve set up a partial to drop media items into a view&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haml&quot; data-lang=&quot;haml&quot;&gt;&lt;span class=&quot;c&quot;&gt;-# ./views/_media.haml
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each_slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;nc&quot;&gt;.row&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;nc&quot;&gt;.large-4.columns&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;%img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:src&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;standard_resolution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&quot;}
+          &lt;span class=&quot;nt&quot;&gt;%br&lt;/span&gt;/
+          &lt;span class=&quot;nt&quot;&gt;%a&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{:href =&amp;gt; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_like&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#{media_item.id}&lt;/span&gt;&quot;} like
+          &lt;span class=&quot;nt&quot;&gt;%a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:href&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/media_unlike/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;media_item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&quot;} un-like
+          &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; succeed &quot;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#{media_item.likes[:count]} likes&quot; do&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;%br&lt;/span&gt;/&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And use it in a few different views, here’s an example;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haml&quot; data-lang=&quot;haml&quot;&gt;&lt;span class=&quot;c&quot;&gt;-# ./views/user_media.haml
+&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;.row&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;%h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&#39;s recent media&quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;partial&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:media&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;locals: &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;media: &lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@recent_media&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h4 id=&quot;short-and-sweet&quot;&gt;Short and Sweet&lt;/h4&gt;
+
+&lt;p&gt;This post is shorter than most, but hopefully straight foward enough that it’s useful! As always, feel free to contact me on &lt;a href=&quot;https://twitter.com/cfinley&quot;&gt;twitter&lt;/a&gt; or &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#102;&amp;#105;&amp;#110;&amp;#108;&amp;#101;&amp;#121;&amp;#046;&amp;#099;&amp;#111;&amp;#114;&amp;#101;&amp;#121;&amp;#064;&amp;#103;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;email&lt;/a&gt; me. See you soon! See you soon!&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 19 Jan 2016 09:00:00 -0500</pubDate>
+        <link>http://finleye.com/sinatra/2016/01/19/haml-and-partials.html</link>
+        <guid isPermaLink="true">http://finleye.com/sinatra/2016/01/19/haml-and-partials.html</guid>
+        
+        
+        <category>sinatra</category>
+        
+      </item>
     
       <item>
         <title>There&#39;s Always More to Learn</title>

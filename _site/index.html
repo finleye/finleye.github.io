@@ -44,6 +44,90 @@
   
   <article class="post">
     <h1 class="post-title">
+      <a href="/sinatra/2016/01/19/haml-and-partials.html">
+        HAML and Partials
+      </a>
+    </h1>
+
+    <time datetime="2016-01-19T09:00:00-05:00" class="post-date">19 Jan 2016</time>
+
+    <p>When I started working on this Sinatra app, I told myself I wouldn’t turn it into Rails. That lasted all of about 20 minutes. I imediately realized I was missing a could things that I couldn’t do without.</p>
+
+<h4 id="haml">HAML</h4>
+
+<p>Adding HAML support to a Sinatra app is pretty straight forward. First add the <a href="https://github.com/haml/haml">haml gem</a> to your <code class="highlighter-rouge">Gemfile</code>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./Gemfile</span>
+<span class="n">gem</span> <span class="s2">"haml"</span></code></pre></figure>
+
+<p>Then require it in your <code class="highlighter-rouge">config.ru</code>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./config.ru</span>
+<span class="nb">require</span> <span class="s1">'haml'</span></code></pre></figure>
+
+<p>No you can call the your <code class="highlighter-rouge">.haml</code> views in the application, instead of using the <code class="highlighter-rouge">html</code> tag.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">get</span> <span class="s1">'/'</span> <span class="k">do</span>
+  <span class="n">haml</span> <span class="ss">:welcome</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Pretty easy!</p>
+
+<h4 id="partials">Partials</h4>
+
+<p>What’s likely more interesting and usefull is setting up partials the way rails natively supports.</p>
+
+<p>First you’ll of course need the <a href="https://github.com/yb66/Sinatra-Partial">sinatra-partial gem</a>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./Gemfile</span>
+<span class="n">gem</span> <span class="s2">"sinatra-partial"</span></code></pre></figure>
+
+<p>And require it.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./config.ru</span>
+<span class="nb">require</span> <span class="s1">'sinatra/partial'</span></code></pre></figure>
+
+<p>Then you have to register and enable it within your app.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./still_leaf.rb</span>
+<span class="k">class</span> <span class="nc">StillLeaf</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">register</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Partial</span>
+  <span class="n">enable</span> <span class="ss">:partial_underscores</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Now within views your abble to load partials similar to the way you do in rails.</p>
+
+<p>I’ve set up a partial to drop media items into a view</p>
+
+<figure class="highlight"><pre><code class="language-haml" data-lang="haml"><span class="c">-# ./views/_media.haml
+</span><span class="p">-</span><span class="n">media</span><span class="p">.</span><span class="nf">each_slice</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">media_group</span><span class="o">|</span>
+  <span class="nc">.row</span>
+    <span class="p">-</span><span class="n">media_group</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">media_item</span><span class="o">|</span>
+      <span class="nc">.large-4.columns</span>
+        <span class="nt">%img</span><span class="p">{</span><span class="ss">:src</span> <span class="o">=&gt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">media_item</span><span class="p">.</span><span class="nf">images</span><span class="p">.</span><span class="nf">standard_resolution</span><span class="p">.</span><span class="nf">url</span><span class="si">}</span>"}
+          <span class="nt">%br</span>/
+          <span class="nt">%a</span><span class="s2">{:href =&gt; "</span><span class="o">/</span><span class="n">media_like</span><span class="o">/</span><span class="c1">#{media_item.id}</span>"} like
+          <span class="nt">%a</span><span class="p">{</span><span class="ss">:href</span> <span class="o">=&gt;</span> <span class="s2">"/media_unlike/</span><span class="si">#{</span><span class="n">media_item</span><span class="p">.</span><span class="nf">id</span><span class="si">}</span>"} un-like
+          <span class="p">=</span><span class="s2"> succeed "</span><span class="c1">#{media_item.likes[:count]} likes" do</span>
+            <span class="nt">%br</span>/</code></pre></figure>
+
+<p>And use it in a few different views, here’s an example;</p>
+
+<figure class="highlight"><pre><code class="language-haml" data-lang="haml"><span class="c">-# ./views/user_media.haml
+</span><span class="nc">.row</span>
+  <span class="nt">%h2</span><span class="p">=</span><span class="s2">"</span><span class="si">#{</span><span class="vi">@user</span><span class="p">.</span><span class="nf">username</span><span class="si">}</span><span class="s2">'s recent media"</span>
+  <span class="p">=</span><span class="n">partial</span> <span class="ss">:media</span><span class="p">,</span> <span class="ss">locals: </span><span class="p">{</span> <span class="ss">media: </span><span class="vi">@recent_media</span> <span class="p">}</span></code></pre></figure>
+
+<h4 id="short-and-sweet">Short and Sweet</h4>
+
+<p>This post is shorter than most, but hopefully straight foward enough that it’s useful! As always, feel free to contact me on <a href="https://twitter.com/cfinley">twitter</a> or <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">email</a> me. See you soon! See you soon!</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
       <a href="/elixir/scheme/2016/01/16/other-languages.html">
         There's Always More to Learn
       </a>
@@ -432,33 +516,6 @@
 
   </article>
   
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/sinatra/heroku/instagram/2016/01/12/what-to-call-it.html">
-        What to call it
-      </a>
-    </h1>
-
-    <time datetime="2016-01-12T09:21:19-05:00" class="post-date">12 Jan 2016</time>
-
-    <p>A while back, a co-worker of mine, <a href="https://github.com/briancantrell">Brian</a>, told me about an idea for an app that would use the <a href="https://www.instagram.com/developer/">Instagram API</a>. I wanted to help and decided to write a small <a href="http://www.sinatrarb.com/">Sinatra</a> app to play with the API. A lot of frustration and learning later I figured out a few things;</p>
-
-<ol>
-  <li>Much of my Ruby knowledge turned out to be Rails knowledge. Small stuff, for example <code class="highlighter-rouge">#present?</code> is part of Rails, not Ruby.</li>
-  <li>It’s tricky to build a Sinatra app and stick to its framework. I had to read up on Sinatra conventions in an attempt to not build of all the Rails <em>conveniences</em> (read crutches) that I counted on.</li>
-  <li><a href="https://www.instagram.com/developer/sandbox/">Instagram’s Sandbox</a> mode for their API will make you pull your hair out if you don’t understand it.</li>
-</ol>
-
-<h3 id="it-needs-a-better-name">It needs a (better) name</h3>
-<p>But first, I had to figure out what to call it. I know you shouldn’t name things first, but I had to at least figure out what to call the repo. I started with <strong>Instalocation</strong>. Terrible, I know, but it was a location search of the API, so it seemed practical. I decided the best bet was to try a random app name generator. I landed on <strong>Still Leaf</strong> and went with it.</p>
-
-<p>My next post will be about some of the gems I used, and some things I learned about <a href="http://www.sinatrarb.com/">Sinatra</a>.</p>
-
-<p>See you soon!</p>
-
-
-  </article>
-  
 </div>
 
 <div class="pagination">
@@ -483,7 +540,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-18T18:58:55-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-19T20:41:31-05:00">2016</time>. All rights reserved.
   </small>
   <small>
     <a href="/disclaimer">Disclaimer</a>
