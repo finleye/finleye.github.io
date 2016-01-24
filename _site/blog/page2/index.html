@@ -44,6 +44,84 @@
   
   <article class="post">
     <h1 class="post-title">
+      <a href="/sinatra/instagram/2016/01/13/day-1.html">
+        Day 1
+      </a>
+    </h1>
+
+    <time datetime="2016-01-13T09:00:00-05:00" class="post-date">13 Jan 2016</time>
+
+    <p>So you want to build a Sinatra app using Instagram’s API? Well you’re in luck! I’ll go though some of what I did, and hopefully provide some insight.</p>
+
+<h4 id="getting-started">Getting started</h4>
+
+<p>An easy solution for boiler-plating an app is to use <a href="https://github.com/zachpendleton/snfn">Snfn</a>. Similar to <code class="highlighter-rouge">rails new commandsapp</code>, you can run <code class="highlighter-rouge">snfn my_app</code> to get something going. It throws together an application class, and gives you some minimal setup with a views folder and importantly a <code class="highlighter-rouge">config.ru</code>, for use with <code class="highlighter-rouge">rackup</code>.</p>
+
+<p>That <code class="highlighter-rouge">config.ru</code> file contains some information about how your app should be loaded and ran. You can take a look at the <code class="highlighter-rouge">config.ru</code> file for <a href="https://github.com/finleye/still-leaf">Still Leaf</a>, here <a href="https://github.com/finleye/still-leaf/blob/master/config.ru">in the repo</a>. In mine you’ll see some load path stuff, bundler, and so on. What’s really important here is the last line:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">run</span> <span class="no">StillLeaf</span></code></pre></figure>
+
+<p>This actually kicks up the application and gives you something to look at. One confusing bit in the beginning that caused me issue was this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sx">%w{config/initializers lib}</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">load_path</span><span class="o">|</span>
+  <span class="no">Find</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">load_path</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+    <span class="nb">require</span> <span class="n">f</span> <span class="k">unless</span> <span class="n">f</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/\/\..+$/</span><span class="p">)</span> <span class="o">||</span> <span class="no">File</span><span class="p">.</span><span class="nf">directory?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>The problem here being the <code class="highlighter-rouge">config/initializers</code>, the first element in the array. While this bit of code is provided by <a href="https://github.com/zachpendleton/snfn">Snfn</a>, there is no <code class="highlighter-rouge">config/initializers</code> directory provided. From the app directory just run this to clear up this issue.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mkdir config
+<span class="gp">$ </span><span class="nb">cd </span>config/
+<span class="gp">$ </span>mkdir initializers</code></pre></figure>
+
+<p>Then when you run <code class="highlighter-rouge">rackup</code>, it won’t blow up trying to load nonexistent directories.</p>
+
+<h4 id="how-to-handle-env-variables">How to handle ENV variables</h4>
+<p>I knew I would be hosting this on <a href="https://www.heroku.com/">Heroku</a>, because it’s easy, free (at first), and well, mostly because I don’t know how to set up something on AWS. That’ll come in a much later post when I embark on that part of the journey.</p>
+
+<p>I like to use a gem called <a href="https://github.com/bkeepers/dotenv">dotenv</a>, I’ve used it before and it works well enough for what I need. You set up a <code class="highlighter-rouge">.env</code> in the root of the app, and it interacts in the application, the same way Heroku environment variables do.</p>
+
+<p>Here’s a <code class="highlighter-rouge">.env</code> setup walkthrough;</p>
+
+<p>First, add it to your <code class="highlighter-rouge">Gemfile</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Gemfile</span>
+<span class="n">group</span> <span class="ss">:test</span><span class="p">,</span> <span class="ss">:development</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s1">'dotenv-rails'</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Then add it to your <code class="highlighter-rouge">.gitignore</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>touch .env
+<span class="gp">$ </span><span class="nb">echo</span> .env &gt;&gt; .gitignore</code></pre></figure>
+
+<p>Then your <code class="highlighter-rouge">.env</code> will look like this;</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">INSTAGRAM_CLIENT_ID</span><span class="o">=</span>your_client_id
+<span class="nv">INSTAGRAM_CLIENT_SECRET</span><span class="o">=</span>your_client_secret
+<span class="nv">INSTAGRAM_CALLBACK_URL</span><span class="o">=</span>http://localhost:9292/oauth/callback
+<span class="nv">GOOGLE_MAPS_GEOCODING_KEY</span><span class="o">=</span>your_gmaps_geocodding_key</code></pre></figure>
+
+<p>You’ll need to add it to your <code class="highlighter-rouge">config.ru</code> so the app knows how to load it;</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># config.ru</span>
+<span class="k">if</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'RACK_ENV'</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'production'</span>
+  <span class="nb">require</span> <span class="s1">'dotenv'</span>
+  <span class="no">Dotenv</span><span class="p">.</span><span class="nf">load</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Then you can do something like this in the app to use your environment variables.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">ENV</span><span class="p">[</span><span class="s2">"INSTAGRAM_CLIENT_ID"</span><span class="p">]</span></code></pre></figure>
+
+<p>Boom! Secure environment variables for running the app locally. Up next: I’ll walk though some of the set up the <a href="https://www.instagram.com/developer/">Instagram API</a> and the pains of <a href="https://www.instagram.com/developer/sandbox/">sandbox mode</a>.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
       <a href="/sinatra/heroku/instagram/2016/01/12/what-to-call-it.html">
         What to call it
       </a>
@@ -111,7 +189,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-20T07:22:32-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-01-24T16:41:35-05:00">2016</time>. All rights reserved.
   </small>
   <small>
     <a href="/disclaimer">Disclaimer</a>

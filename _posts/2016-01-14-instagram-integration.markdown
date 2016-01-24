@@ -93,7 +93,7 @@ end
 
 If you want to see how `@user` and `@recent_meda` are being used, take a look at [the view in the repo][user-recent-media-view], and the full application class can be found [here in the repo][application-class] as well.
 
-That covers everything to get the `access_token` from Instagram, and use the client to get media. My next post will be about Instagram's API sandbox mode and it's limitations. Until then, feel free to contact me on [twitter] or [email] me. See you soon!
+That covers everything to get the `access_token` from Instagram, and use the client to get media. My next post will be about Instagram's API sandbox mode and it's limitations. Until then, feel free to contact me on [twitter][twitter] or [email][email] me. See you soon!
 
 
 [instagram-api-gem]: https://github.com/Instagram/instagram-ruby-gem

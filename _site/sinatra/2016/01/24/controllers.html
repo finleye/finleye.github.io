@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      Implementing Sinatra Controllers &middot; finleye
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/atom+xml" title="finleye" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="container content">
+      <header class="masthead">
+        <a href="/about">
+          <img src="/assets/images/prof-pic-a.jpg" class="avatar" align="left" />
+        </a>
+        <h3 class="masthead-title">
+          <a href="/" title="Home">finleye</a>
+          <small>Ruby on Rails Dev</small>
+        </h3>
+      </header>
+
+      <main>
+        <article class="post">
+  <h1 class="post-title">Implementing Sinatra Controllers</h1>
+  <time datetime="2016-01-24T09:00:00-05:00" class="post-date">24 Jan 2016</time>
+  <p>Working on <a href="https://github.com/finleye/still-leaf">this app</a>, I realized that the single application file was getting to be a bit much. So I wanted to separate concerns, in part because I <em>really</em> hated this authentication logic at the top of app.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">before</span> <span class="k">do</span>
+  <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="nf">path_info</span> <span class="o">==</span> <span class="s1">'/'</span> <span class="o">||</span>
+      <span class="o">!</span><span class="n">session</span><span class="p">[</span><span class="ss">:ig_access_token</span><span class="p">].</span><span class="nf">nil?</span> <span class="o">||</span>
+      <span class="n">request</span><span class="p">.</span><span class="nf">path_info</span> <span class="o">=~</span> <span class="sr">/\/oauth\//</span>
+    <span class="n">pass</span>
+  <span class="k">else</span>
+    <span class="n">redirect</span> <span class="s1">'/'</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>I know that smells, but it was the best solution at the time. I didn’t want to check the request path to know if the user needs to be authenticated, I wanted hooks. I wanted controllers with isolated responsibility. So with some help from <a href="http://www.sitepoint.com/build-a-sinatra-mvc-framework/">this article</a> I made it happen. Here’s what I did.</p>
+
+<h4 id="we-need-a-base-controller">We need a base controller</h4>
+
+<p>The <code class="highlighter-rouge">ApplicationController</code> like in Rails, will be the base for all our other controllers. One important thing to note here, is the view path line. Since this controller lives within a directory, you need to tell it where the views are in relation.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./controllers/application_controller.rb</span>
+<span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">helpers</span> <span class="no">ApplicationHelpers</span>
+
+  <span class="c1"># ...</span>
+  <span class="n">set</span> <span class="ss">:views</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s1">'../../views'</span><span class="p">,</span> <span class="kp">__FILE__</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This lets me separate some of the authentication logic. For example I added the <code class="highlighter-rouge">ApplicationHelpers</code> to check the current user.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./helpers/application_helpers.rb</span>
+<span class="k">module</span> <span class="nn">ApplicationHelpers</span>
+  <span class="k">def</span> <span class="nf">authenticated?</span>
+    <span class="o">!</span><span class="n">session</span><span class="p">[</span><span class="ss">:ig_access_token</span><span class="p">].</span><span class="nf">nil?</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">authenticate!</span>
+    <span class="n">redirect</span> <span class="s1">'/'</span> <span class="k">unless</span> <span class="n">authenticated?</span>
+  <span class="k">end</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>That <code class="highlighter-rouge">authenticate!</code> method will come in handy in the media controller.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./controllers/media_controller.rb</span>
+<span class="k">class</span> <span class="nc">MediaController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="n">before</span> <span class="p">{</span> <span class="n">authenticate!</span> <span class="p">}</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>That authentication line, <code class="highlighter-rouge">before { authenticate! }</code>, is so much better than the hairy path checking logic at the top.</p>
+
+<h4 id="make-the-routes-work">Make the routes work</h4>
+
+<p>There’s a crucial piece here to tie all this together. We need to tell the <code class="highlighter-rouge">config.ru</code> to load the new directories and how to route incoming requests. I’ll require the new directories, and in the last lines I map the request to the right controllers. The last couple lines of my <code class="highlighter-rouge">config.ru</code> look like this.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ./config.ru</span>
+
+<span class="sx">%w{config/initializers lib helpers controllers}</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">load_path</span><span class="o">|</span>
+  <span class="no">Find</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">load_path</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+    <span class="nb">require</span> <span class="n">f</span> <span class="k">unless</span> <span class="n">f</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/\/\..+$/</span><span class="p">)</span> <span class="o">||</span> <span class="no">File</span><span class="p">.</span><span class="nf">directory?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+
+<span class="n">map</span><span class="p">(</span><span class="s1">'/media'</span><span class="p">)</span> <span class="p">{</span> <span class="n">run</span> <span class="no">MediaController</span> <span class="p">}</span>
+<span class="n">map</span><span class="p">(</span><span class="s1">'/oauth'</span><span class="p">)</span> <span class="p">{</span> <span class="n">run</span> <span class="no">OauthController</span> <span class="p">}</span>
+<span class="n">map</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span> <span class="p">{</span><span class="n">run</span> <span class="no">StaticPagesController</span> <span class="p">}</span></code></pre></figure>
+
+<p>That’ll have the routes mapped to the new controllers. For a more detailed look, check out <a href="https://github.com/finleye/still-leaf">the repo on GitHub</a>. As always, feel free to contact me on <a href="https://twitter.com/cfinley">twitter</a> or <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">email</a> me. See you soon!</p>
+
+
+</article>
+
+
+<aside class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/sinatra/2016/01/19/haml-and-partials.html">
+            HAML and Partials
+            <small><time datetime="2016-01-19T09:00:00-05:00">19 Jan 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/elixir/scheme/2016/01/16/other-languages.html">
+            There's Always More to Learn
+            <small><time datetime="2016-01-16T09:00:00-05:00">16 Jan 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/instagram/sandbox/2016/01/15/sandbox-mode.html">
+            Head in the Sandbox
+            <small><time datetime="2016-01-15T09:00:00-05:00">15 Jan 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</aside>
+
+
+      </main>
+
+      <footer class="footer">
+  <div>
+    <a href="/about">About me</a>
+    <a href="https://github.com/finleye"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">finleye</span></a>
+
+    <a href="https://twitter.com/cfinley"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">cfinley</span></a>
+
+  </div>
+  <small>
+    &copy; <time datetime="2016-01-24T16:41:35-05:00">2016</time>. All rights reserved.
+  </small>
+  <small>
+    <a href="/disclaimer">Disclaimer</a>
+  </small>
+</footer>
+
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42037834-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div>
+  </body>
+</html>
