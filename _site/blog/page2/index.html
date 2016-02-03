@@ -44,6 +44,94 @@
   
   <article class="post">
     <h1 class="post-title">
+      <a href="/sinatra/instagram/2016/01/14/instagram-integration.html">
+        Instagram Integration
+      </a>
+    </h1>
+
+    <time datetime="2016-01-14T09:00:00-05:00" class="post-date">14 Jan 2016</time>
+
+    <p>Adding Instagram API integration to your application is pretty straight forward, but some parts can be tricky. I’ll walk through what I did, and hopefully make it an easy task if you decide to try it.</p>
+
+<h4 id="adding-the-instagram-api-gem">Adding the Instagram API gem</h4>
+<p>I’m using the <a href="https://github.com/Instagram/instagram-ruby-gem">Instagram API gem</a> for <a href="https://github.com/finleye/still-leaf">this project</a>. To add this gem to your <a href="http://www.sinatrarb.com/">Sinatra</a> app, you’ll just need to do the following;</p>
+
+<p>Add the gem to your app’s <code class="highlighter-rouge">Gemfile</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s2">"instagram"</span></code></pre></figure>
+
+<p>And run <code class="highlighter-rouge">bundle</code> from the command line to install the gem.</p>
+
+<p>I added an initializer to set up them gem:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#/config/initializers/instagram.rb</span>
+<span class="no">Instagram</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">client_id</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s2">"INSTAGRAM_CLIENT_ID"</span><span class="p">]</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">client_secret</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s2">"INSTAGRAM_CLIENT_SECRET"</span><span class="p">]</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Then add this to your application’s <code class="highlighter-rouge">config.ru</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'instagram'</span></code></pre></figure>
+
+<p>Now that the Instagram gem is set up, we’ll use it in the application file.</p>
+
+<h4 id="oauth-endpoints">OAUTH Endpoints</h4>
+<p>Your application will need to know how to handle the handshake with Instagram’s API. You’ll need a few endpoints to handle this.</p>
+
+<p>The first endpoint will send the request for the authentication token.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">get</span> <span class="s1">'/oauth/connect'</span> <span class="k">do</span>
+  <span class="n">scope</span> <span class="o">=</span>  <span class="s1">'likes public_content'</span>
+  <span class="n">redirect</span> <span class="no">Instagram</span><span class="p">.</span><span class="nf">authorize_url</span><span class="p">(</span><span class="ss">redirect_uri: </span><span class="no">ENV</span><span class="p">[</span><span class="s1">'INSTAGRAM_CALLBACK_URL'</span><span class="p">],</span> <span class="ss">scope: </span><span class="n">scope</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">scope</code> part of this block tells their API what all you want access to. In this case I want the ability to like photos, and access to public content. Note that you’ll be providing a redirect URL as well. This tells Instagram where you send back the <code class="highlighter-rouge">access_token</code>.</p>
+
+<p>In the callback endpoint, you’ll need to save the <code class="highlighter-rouge">access_token</code>, and then send them on their way with something to show.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">get</span> <span class="s1">'/oauth/callback'</span> <span class="k">do</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="no">Instagram</span><span class="p">.</span><span class="nf">get_access_token</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="ss">:code</span><span class="p">],</span> <span class="ss">redirect_uri: </span><span class="no">ENV</span><span class="p">[</span><span class="s1">'INSTAGRAM_CALLBACK_URL'</span><span class="p">])</span>
+  <span class="k">if</span> <span class="n">response</span><span class="p">.</span><span class="nf">access_token</span>
+    <span class="n">session</span><span class="p">[</span><span class="ss">:ig_access_token</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="nf">access_token</span>
+    <span class="n">flash</span><span class="p">[</span><span class="ss">:success</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"You've logged in as @</span><span class="si">#{</span><span class="n">insta_client</span><span class="p">.</span><span class="nf">user</span><span class="p">.</span><span class="nf">username</span><span class="si">}</span><span class="s2">."</span>
+  <span class="k">else</span>
+    <span class="n">flash</span><span class="p">[</span><span class="ss">:alert</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Something went wrong."</span>
+  <span class="k">end</span>
+
+  <span class="n">redirect</span> <span class="s1">'/user_recent_media'</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>One thing to note here is that <code class="highlighter-rouge">ig_access_token</code> is being added to the <code class="highlighter-rouge">session</code>. This is a given in Rails, but here you’ll need to enable sessions for Sinatra. Below you’ll class declaration, add <code class="highlighter-rouge">enable :sessions</code>. Mine looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">StillLeaf</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">enable</span> <span class="ss">:sessions</span></code></pre></figure>
+
+<h4 id="show-the-user-something-from-instagram">Show the user something from Instagram</h4>
+<p>You may have noticed in my OAUTH callback endpoint, that I redirect to <code class="highlighter-rouge">/user_recent_media</code>. This action renders a view of the current users recent media from Instagram. That code looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">get</span> <span class="s1">'/user_recent_media'</span> <span class="k">do</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="n">insta_client</span><span class="p">.</span><span class="nf">user</span>
+  <span class="vi">@recent_media</span> <span class="o">=</span> <span class="n">insta_client</span><span class="p">.</span><span class="nf">user_recent_media</span>
+
+  <span class="n">haml</span> <span class="ss">:user_media</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>You’ll see references to a method called <code class="highlighter-rouge">insta_client</code>, references a memoization of the client so it can be reused. The <code class="highlighter-rouge">insta_client</code> method looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">insta_client</span>
+  <span class="vi">@insta_client</span> <span class="o">=</span> <span class="no">Instagram</span><span class="p">.</span><span class="nf">client</span><span class="p">(</span><span class="ss">access_token: </span><span class="n">session</span><span class="p">[</span><span class="ss">:ig_access_token</span><span class="p">])</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>If you want to see how <code class="highlighter-rouge">@user</code> and <code class="highlighter-rouge">@recent_meda</code> are being used, take a look at <a href="https://github.com/finleye/still-leaf/blob/master/views/user_media.haml">the view in the repo</a>, and the full application class can be found <a href="https://github.com/finleye/still-leaf/blob/master/still_leaf.rb">here in the repo</a> as well.</p>
+
+<p>That covers everything to get the <code class="highlighter-rouge">access_token</code> from Instagram, and use the client to get media. My next post will be about Instagram’s API sandbox mode and it’s limitations. Until then, feel free to contact me on <a href="https://twitter.com/cfinley">twitter</a> or <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#102;&#105;&#110;&#108;&#101;&#121;&#046;&#099;&#111;&#114;&#101;&#121;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">email</a> me. See you soon!</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
       <a href="/sinatra/instagram/2016/01/13/day-1.html">
         Day 1
       </a>
@@ -189,7 +277,7 @@
 
   </div>
   <small>
-    &copy; <time datetime="2016-01-24T16:41:35-05:00">2016</time>. All rights reserved.
+    &copy; <time datetime="2016-02-03T11:08:39-05:00">2016</time>. All rights reserved.
   </small>
   <small>
     <a href="/disclaimer">Disclaimer</a>

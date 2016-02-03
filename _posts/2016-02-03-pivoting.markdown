@@ -1,0 +1,29 @@
+---
+layout: post
+title:  "Pivoting"
+date: 2016-02-03 09:00:00 -0500
+categories: phoenix elixir
+---
+
+I've decided to change directions a bit with this project. I have a clear focus now for what I want to make and the features I want out of this project, and even better I've decided to go with a new technology.
+
+#### Elixir
+
+I've been reading [_Elixir in Action_][elixir-in-action] by Saša Jurić, in order to learn [Elixir][elixir-lang], and so far I really like it. It's the first real exposure I've had to functional programming. I plan to read Dave Thomas's [_Programming Elixir_][programming-elixir] next, followed by [_Metaprogramming Elixir_][metaprogramming-elixir], but I'm already getting more confident with the language. I've learned enough to debug a friend's project, and even start though [a Phoenix blog engine tutorial][phoenix-blog-tutorial]. Which brings me to my next point.
+
+#### Phoenix
+
+I've decided to ditch the Sinatra app and do this project in Elixir and [Phoenix][phoenix]. I've done part of a tutorial for Phoenix and I'm really excited to try out a new language and framework. And I think that a Phoenix based API will be great backing if I decide to make this into an iOS app in the future.
+
+Until my next post, feel free to contact me on [twitter][twitter] or [email][email] me. See you soon!
+
+[elixir-in-action]: http://www.amazon.com/Elixir-Action-scaron-Juri-cacute/dp/161729201X
+[elixir-lang]: http://elixir-lang.org/
+[programming-elixir]: http://www.amazon.com/Programming-Elixir-Functional-Concurrent-Pragmatic/dp/1937785580/ref=asap_bc?ie=UTF8
+[metaprogramming-elixir]: http://www.amazon.com/Metaprogramming-Elixir-Write-Less-Code/dp/1680500414/ref=dp_rm_img_0
+[phoenix]: http://www.phoenixframework.org/
+[programming-phoenix]: http://www.amazon.com/Programming-Phoenix-Productive-Reliable-Fast/dp/1680501453/ref=pd_sim_14_5?ie=UTF8&dpID=41lVg5P7ZlL&dpSrc=sims&preST=_AC_UL160_SR133%2C160_&refRID=1XTHTQ9S9BGFN9VYAG3V
+[phoenix-blog-tutorial]: https://medium.com/@diamondgfx/introduction-fe138ac6079d#.racvr74ik
+[twitter]: https://twitter.com/cfinley
+[email]: mailto:finley.corey@gmail.com
+[rtfm]: https://en.wikipedia.org/wiki/RTFM

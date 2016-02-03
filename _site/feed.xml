@@ -5,9 +5,35 @@
     <description>Brooklyn based developer and coffee enthusiast</description>
     <link>http://finleye.com/</link>
     <atom:link href="http://finleye.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 24 Jan 2016 16:41:35 -0500</pubDate>
-    <lastBuildDate>Sun, 24 Jan 2016 16:41:35 -0500</lastBuildDate>
+    <pubDate>Wed, 03 Feb 2016 11:08:39 -0500</pubDate>
+    <lastBuildDate>Wed, 03 Feb 2016 11:08:39 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Pivoting</title>
+        <description>&lt;p&gt;I’ve decided to change directions a bit with this project. I have a clear focus now for what I want to make and the features I want out of this project, and even better I’ve decided to go with a new technology.&lt;/p&gt;
+
+&lt;h4 id=&quot;elixir&quot;&gt;Elixir&lt;/h4&gt;
+
+&lt;p&gt;I’ve been reading &lt;a href=&quot;http://www.amazon.com/Elixir-Action-scaron-Juri-cacute/dp/161729201X&quot;&gt;&lt;em&gt;Elixir in Action&lt;/em&gt;&lt;/a&gt; by Saša Jurić, in order to learn &lt;a href=&quot;http://elixir-lang.org/&quot;&gt;Elixir&lt;/a&gt;, and so far I really like it. It’s the first real exposure I’ve had to functional programming. I plan to read Dave Thomas’s &lt;a href=&quot;http://www.amazon.com/Programming-Elixir-Functional-Concurrent-Pragmatic/dp/1937785580/ref=asap_bc?ie=UTF8&quot;&gt;&lt;em&gt;Programming Elixir&lt;/em&gt;&lt;/a&gt; next, followed by &lt;a href=&quot;http://www.amazon.com/Metaprogramming-Elixir-Write-Less-Code/dp/1680500414/ref=dp_rm_img_0&quot;&gt;&lt;em&gt;Metaprogramming Elixir&lt;/em&gt;&lt;/a&gt;, but I’m already getting more confident with the language. I’ve learned enough to debug a friend’s project, and even start though &lt;a href=&quot;https://medium.com/@diamondgfx/introduction-fe138ac6079d#.racvr74ik&quot;&gt;a Phoenix blog engine tutorial&lt;/a&gt;. Which brings me to my next point.&lt;/p&gt;
+
+&lt;h4 id=&quot;phoenix&quot;&gt;Phoenix&lt;/h4&gt;
+
+&lt;p&gt;I’ve decided to ditch the Sinatra app and do this project in Elixir and &lt;a href=&quot;http://www.phoenixframework.org/&quot;&gt;Phoenix&lt;/a&gt;. I’ve done part of a tutorial for Phoenix and I’m really excited to try out a new language and framework. And I think that a Phoenix based API will be great backing if I decide to make this into an iOS app in the future.&lt;/p&gt;
+
+&lt;p&gt;Until my next post, feel free to contact me on &lt;a href=&quot;https://twitter.com/cfinley&quot;&gt;twitter&lt;/a&gt; or &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#102;&amp;#105;&amp;#110;&amp;#108;&amp;#101;&amp;#121;&amp;#046;&amp;#099;&amp;#111;&amp;#114;&amp;#101;&amp;#121;&amp;#064;&amp;#103;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;email&lt;/a&gt; me. See you soon!&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 03 Feb 2016 09:00:00 -0500</pubDate>
+        <link>http://finleye.com/phoenix/elixir/2016/02/03/pivoting.html</link>
+        <guid isPermaLink="true">http://finleye.com/phoenix/elixir/2016/02/03/pivoting.html</guid>
+        
+        
+        <category>phoenix</category>
+        
+        <category>elixir</category>
+        
+      </item>
     
       <item>
         <title>Implementing Sinatra Controllers</title>
