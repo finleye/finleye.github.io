@@ -1,0 +1,21 @@
+---
+layout: post
+title: "---"
+date: 2019-02-09
+author: finley
+tags:
+  - Travel,photos,test
+category: blog
+blog: true
+---
+
+title:  "Pivoting"
+date: 2019-03-04 09:00:00 -0500
+categories: phoenix elixir
+---
+
+This is a test
+
+![Ruby](/assets/ruby2.jpeg)
+
+this is done!
