@@ -1,4 +1,23 @@
-@import url('https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans');
+@import url('https://fonts.googleapis.com/css?family=Archivo|Inconsolata');
+
+:root {
+  --background: #f4f4f4;
+  --color_1: #72dec2;
+  --color_2: #51a196;
+  --color_3: #316067;
+  --grey_1: #f4f4f4;
+  --grey_2: #a1a1a1;
+  --grey_3: #333333;
+  --grey_4: #111111;
+  --rounded: 2px;
+}
+
+
+body {
+  background-color: var(--background);
+}
+
+
 article,aside,footer,header,hgroup,nav,section{
   display:block
 }
@@ -10,40 +29,46 @@ body,h1,h2,h3,h4,h5,h6,p,ul,ol{
   box-sizing:border-box
 }
 h1,h2,h3,h4,h5,h6 {
-  font-family: 'Abril Fatface', Georgia, Times New Roman, serif;
+  font-family: 'Archivo', Georgia, Times New Roman, serif;
   font-weight:400
 }
+ul,li {
+  font-family: 'Inconsolata', monospace;
+  color: var(--grey_4);
+  list-style: none;
+  padding-left: 20px;
+}
 h1 {
-  color: #4e4e56;
+  color: var(--gray_4);
   margin-bottom:30px
 }
 h2{
-  color: #da635d;
+  color: var(--gray_4);
   margin-bottom:15px
 }
 h3{
-  color: #dcd0c0;
+  color: var(--gray_4);
   padding-top:60px
 }
 h2+h3{
   padding-top:0
 }
 h4{
-  padding-left:30px
+  padding-left:20px
 }
 h4+ul{
   margin-left:30px
 }
 h5{
   font-size:14px;
-  color:#F2C75D;
+  color: var(--grey_4);
   text-transform:uppercase;
   letter-spacing:1px
 }
 h6{
   font-size:12px;
   line-height:15px;
-  color:rgba(119,119,119,0.5);
+  color: var(--h6-color);
   text-transform:uppercase;
   letter-spacing:1px
 }
@@ -52,6 +77,7 @@ p.note{
   font-size:14px;
   line-height:15px;
   color:rgba(119,119,119,0.8);
+  color: var(--grey_4);
   margin-bottom:8px
 }
 a{
@@ -101,9 +127,6 @@ hr+h1{
 hr+h2{
   padding-top:60px
 }
-ul{
-  padding-left:50px
-}
 main>ul:not(#markdown-toc){
   margin-top:8px;
   margin-bottom:8px
@@ -115,22 +138,26 @@ html,body{
   height:100%
 }
 body{
-  background:#fff;
-  font-family:"Noto Sans", Optima, Segoe, Candara, Calibri, Arial, sans-serif;
+  /* background:#fff; */
+  /* font-family:"Noto Sans", Optima, Segoe, Candara, Calibri, Arial, sans-serif; */
+  font-family: 'Archivo', Georgia, Times New Roman, serif;
   font-size:18px;
   line-height:30px;
   color:#333;
   display:flex;
   flex-direction:column;
   align-items:stretch;
-  max-width:50em;
-  margin:0 auto;
-  padding:0 20px
+  margin:0;
+  padding:0;
 }
 nav{
   min-height:30px
 }
 main{
+  max-width:50em;
+  min-width: 1200px;
+  margin:0 auto;
+  padding: 0px 20px;
   flex:1;
   padding-bottom:60px
 }
@@ -138,7 +165,7 @@ header{
   padding-bottom:30px
 }
 footer{
-  padding:15px 0
+  padding:15px 10px
 }
 #markdown-toc{
   box-sizing:border-box;
@@ -152,41 +179,34 @@ footer{
 #markdown-toc ul{
   padding-left:30px
 }
-.arrow-box{
-  position:fixed;
-  right:15px;
-  display:inline-block;
-  color:#777;
-  background-color:#FAFAF9;
-  border:1px solid #777;
-  width:20px;
-  line-height:20px;
-  text-align:center;
-  border-bottom:1px solid #777;
-  z-index:9999;
-  opacity:0.7
+
+.header-image-container {
+  min-height: 400px;
+  max-height: 500px;
+  background-color: var(--grey_4);
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
-.arrow-box:hover{
-  text-decoration:none;
-  border-color:#49849D
+.header-image-container .main {
+  border-bottom: 1px;
+  border-color: #fff;
 }
-.arrow-box.cta-main{
-  top:15px
+.header-image-container h1 {
+  padding-top: 20px;
+  color: #fff;
 }
-.arrow-box.cta-main::before{
-  content:"❄"
+
+.header-image {
+  min-height: 400px;
+  max-height: 500px;
 }
-.arrow-box.cta-top{
-  top:45px
+.upcase {
+  text-transform:uppercase;
 }
-.arrow-box.cta-top::before{
-  content:"↑"
-}
-@media screen and (max-width: 51em), print and (orientation: portrait){
-  header,main,footer{
-    width:100%
-  }
-  #markdown-toc{
-    width:100%
+
+@media only screen and (max-width: 600px) {
+  .header-image-container {
+    min-height: 200px;
+    max-height: 200px;
   }
 }
