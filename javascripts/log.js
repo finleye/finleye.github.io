@@ -9,21 +9,35 @@ $( document ).ready(function() {
   $nav = $("nav ul")
   $.map($(".entry"), (el)=>{
     $el = $(el);
-    title = $el.data("timestamp") + " - " + $el.data("title")
-    id = idStr($el.data("timestamp"))
-    console.log(id);
+    timestamp = $($el.find(".timestamp")).text()
+    place = $($el.find(".place")).text()
+
+    id = idStr(timestamp)
+
+    title = timestamp + " - " + place
     $el.attr("id", id);
-    $($el.find(".date")).text(title);
     $nav.append(
       "<li><a href=\"#"+id+"\">"+title+"</a></la>"
     );
-    // debugger
   });
+
   $.map($(".inline-image"), (el)=>{
     $el = $(el);
+
     src = $el.data("img").replace("www.dropbox.com", "dl.dropboxusercontent.com");
+
+    $link = $($el.find("a"))
+    if($link.length > 0){
+      $link.attr("href", src.replace("-opt",""))
+    };
+
     $img = $($el.find("img"));
     $img.attr("src", src);
-    $img.removeClass("placeholder");
   });
+
+  $( () => {
+    $('img').one('load',(event) => {
+      $(event.target).removeClass("placeholder")
+    });
+});
 });
