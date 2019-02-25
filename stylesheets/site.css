@@ -12,7 +12,6 @@
   --rounded: 2px;
 }
 
-
 body {
   background-color: var(--background);
 }
@@ -32,6 +31,11 @@ body,h1,h2,h3,h4,h5,h6,p,ul,ol{
 
 .entry {
   margin-bottom: 75px;
+  min-width: 750px;
+}
+
+.entry p {
+  padding: 0px 30px;
 }
 
 .post-title h2,h3,h4 {
@@ -50,6 +54,22 @@ ul,li,h4,h5,h6 {
   list-style: none;
   padding-left: 20px;
 }
+
+ul, li {
+  font-size: 20px;
+}
+
+.inner-list {
+  margin-bottom: 20px;
+}
+.inner-list li{
+  font-family: 'Archivo', Georgia, Times New Roman, serif;
+  list-style: square;
+  padding-left: 0px;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
 h1 {
   color: var(--gray_4);
   margin-bottom:30px
@@ -58,7 +78,7 @@ h2{
   color: var(--gray_4);
   margin-bottom:15px
 }
-h3{
+.entries h3{
   color: var(--gray_4);
   padding-top:60px
 }
@@ -80,7 +100,7 @@ h5{
 h6{
   font-size:12px;
   line-height:15px;
-  color: var(--h6-color);
+  color: var(--gray_4);
   text-transform:uppercase;
   letter-spacing:1px
 }
@@ -93,25 +113,11 @@ p.note{
   margin-bottom:8px
 }
 a{
-  color: #5dd4da;;
+  color: var(--color_2);;
   text-decoration:none
 }
 a:hover{
-  color:#29698C
-}
-/* a[href*="//"]:not([href*="wintery.me"])::after{ */
-/*   content:"⇱"; */
-/*   color:#777; */
-/*   top:-4px; */
-/*   margin-left:3px; */
-/*   font-size:16px; */
-/*   line-height:1; */
-/*   display:inline-block; */
-/*   position:relative; */
-/*   transform:scale(-1, 1) */
-/* } */
-*:not(strong):not(em)>a{
-  margin-right:5px
+  color: var(--color_3);;
 }
 strong{
   background:rgba(242,199,93,0.2);
@@ -177,8 +183,14 @@ main{
   flex:1;
   padding-bottom:60px
 }
+
+.home, .places {
+  min-width: 800px;
+  margin-top: 20px;
+}
+
 .entries {
-  margin-top: -60px;
+  margin-top: 20px;
 }
 header{
   padding-bottom:30px
@@ -241,7 +253,7 @@ footer{
 .inline-image {
   text-align: center;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .inline-image p{
@@ -274,6 +286,7 @@ img.placeholder {
 .header-nav a {
   color: var(--grey_1);
   text-decoration: none;
+  margin: 0px 10px;
 }
 
 .header-nav {
@@ -281,13 +294,6 @@ img.placeholder {
 }
 
 @media only screen and (max-width: 850px) {
-  .entries {
-    margin-top: 20px;
-  }
-
-  nav {
-    display: none;
-  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -309,12 +315,22 @@ img.placeholder {
     margin-top: 20px;
   }
 
+  .entry {
+    min-width: none;
+  }
+
   nav {
     display: none;
   }
 
   .inline-image img {
     max-width: 320px
+  }
+
+  img.placeholder {
+    background-color: var(--grey_2);
+    height: 320px;
+    width: 320px;
   }
 }
 
