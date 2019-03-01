@@ -313,10 +313,20 @@ img.placeholder {
 
   .entries {
     margin-top: 20px;
+    max-width: 500px;
   }
 
   .entry {
     min-width: none;
+    max-width: 500px;
+  }
+
+  .entry p {
+    max-width: 500px;
+  }
+
+  .inline-image {
+    width: 500px
   }
 
   nav {
