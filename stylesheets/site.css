@@ -318,6 +318,17 @@ img.placeholder {
     max-width:100%;
     min-width: 200px;
   }
+  
+  .home {
+    max-width: 100%;
+    min-width: 400px;
+  }
+    
+  .places {
+    max-width: 100%;
+    min-width: 400px;
+  }
+  
 
   .entries {
     margin-top: 20px;
